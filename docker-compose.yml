@@ -12,9 +12,15 @@ services:
       - postgres
     environment:
       DATABASE_URL: "postgresql://symfony:symfony@postgres:5432/symfony?serverVersion=15&charset=utf8"
-    # Override for development to use the development PHP ini
-    command: sh -c "mv $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini && php-fpm"
-    user: "1000:1000" # Use your host user ID for permissions (adjust as needed)
+    # Fixed command to properly reference PHP ini files
+    command: >
+      bash -c "
+        mv /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini &&
+        mkdir -p /var/www/symfony/var &&
+        chmod -R 777 /var/www/symfony/var &&
+        php-fpm
+      "
+    user: root
 
   # Nginx service with fixed version
   nginx:
