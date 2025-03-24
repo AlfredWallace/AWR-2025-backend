@@ -1,4 +1,5 @@
 services:
+  # PHP service with Symfony
   php:
     build:
       context: .
@@ -13,6 +14,7 @@ services:
       DATABASE_URL: "postgresql://symfony:${POSTGRES_PASSWORD}@postgres:5432/symfony?serverVersion=15&charset=utf8"
     restart: always
 
+  # Nginx service with fixed version
   nginx:
     image: nginx:1.25.3
     ports:
@@ -24,6 +26,7 @@ services:
       - php
     restart: always
 
+  # PostgreSQL service with fixed version
   postgres:
     image: postgres:15.4
     volumes:
