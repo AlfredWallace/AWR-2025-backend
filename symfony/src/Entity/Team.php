@@ -31,6 +31,12 @@ class Team
     #[ORM\Column(length: 255)]
     private string $countryName;
 
+    #[ORM\Column(type: "float")]
+    private float $points;
+
+    #[ORM\Column(type: "float")]
+    private float $previousPoints;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,6 +110,30 @@ class Team
     public function setCountryName(string $countryName): static
     {
         $this->countryName = $countryName;
+
+        return $this;
+    }
+
+    public function getPoints(): float
+    {
+        return $this->points;
+    }
+
+    public function setPoints(float $points): static
+    {
+        $this->points = $points;
+
+        return $this;
+    }
+
+    public function getPreviousPoints(): float
+    {
+        return $this->previousPoints;
+    }
+
+    public function setPreviousPoints(float $previousPoints): static
+    {
+        $this->previousPoints = $previousPoints;
 
         return $this;
     }
