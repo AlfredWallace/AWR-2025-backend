@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TeamRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
 class Team
@@ -11,115 +12,62 @@ class Team
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private(set) ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private string $name;
+    #[Assert\NotBlank]
+    private(set) ?string $name = null {
+        set (?string $name) {
+            $this->name = $name;
+        }
+    }
 
     #[ORM\Column(length: 10)]
-    private string $abbreviation;
+    #[Assert\NotBlank]
+    private(set) ?string $abbreviation = null {
+        set (?string $abbreviation) {
+            $this->abbreviation = $abbreviation;
+        }
+    }
 
     #[ORM\Column]
-    private string $externalId;
+    #[Assert\NotBlank]
+    private(set) ?string $externalId = null {
+        set (?string $externalId) {
+            $this->externalId = $externalId;
+        }
+    }
 
     #[ORM\Column]
-    private string $externalAltId;
+    #[Assert\NotBlank]
+    private(set) ?string $externalAltId = null {
+        set (?string $externalAltId) {
+            $this->externalAltId = $externalAltId;
+        }
+    }
 
     #[ORM\Column(length: 10)]
-    private string $countryCode;
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 3)]
+    private(set) ?string $countryCode = null {
+        set (?string $countryCode) {
+            $this->countryCode = $countryCode;
+        }
+    }
 
     #[ORM\Column(type: "float")]
-    private float $points;
+    #[Assert\NotBlank]
+    private(set) ?float $points = null {
+        set (?float $points) {
+            $this->points = $points;
+        }
+    }
 
     #[ORM\Column(type: "float")]
-    private float $previousPoints;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getAbbreviation(): string
-    {
-        return $this->abbreviation;
-    }
-
-    public function setAbbreviation(string $abbreviation): static
-    {
-        $this->abbreviation = $abbreviation;
-
-        return $this;
-    }
-
-    public function getExternalId(): string
-    {
-        return $this->externalId;
-    }
-
-    public function setExternalId(string $externalId): static
-    {
-        $this->externalId = $externalId;
-
-        return $this;
-    }
-
-    public function getExternalAltId(): string
-    {
-        return $this->externalAltId;
-    }
-
-    public function setExternalAltId(string $externalAltId): static
-    {
-        $this->externalAltId = $externalAltId;
-
-        return $this;
-    }
-
-    public function getCountryCode(): string
-    {
-        return $this->countryCode;
-    }
-
-    public function setCountryCode(string $countryCode): static
-    {
-        $this->countryCode = $countryCode;
-
-        return $this;
-    }
-
-    public function getPoints(): float
-    {
-        return $this->points;
-    }
-
-    public function setPoints(float $points): static
-    {
-        $this->points = $points;
-
-        return $this;
-    }
-
-    public function getPreviousPoints(): float
-    {
-        return $this->previousPoints;
-    }
-
-    public function setPreviousPoints(float $previousPoints): static
-    {
-        $this->previousPoints = $previousPoints;
-
-        return $this;
+    #[Assert\NotBlank]
+    private(set) ?float $previousPoints = null {
+        set (?float $previousPoints) {
+            $this->previousPoints = $previousPoints;
+        }
     }
 }
