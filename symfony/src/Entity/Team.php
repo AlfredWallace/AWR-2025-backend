@@ -20,16 +20,13 @@ class Team
     private string $abbreviation;
 
     #[ORM\Column]
-    private int $externalId;
+    private string $externalId;
 
     #[ORM\Column]
-    private int $externalAltId;
+    private string $externalAltId;
 
     #[ORM\Column(length: 10)]
     private string $countryCode;
-
-    #[ORM\Column(length: 255)]
-    private string $countryName;
 
     #[ORM\Column(type: "float")]
     private float $points;
@@ -66,24 +63,24 @@ class Team
         return $this;
     }
 
-    public function getExternalId(): int
+    public function getExternalId(): string
     {
         return $this->externalId;
     }
 
-    public function setExternalId(int $externalId): static
+    public function setExternalId(string $externalId): static
     {
         $this->externalId = $externalId;
 
         return $this;
     }
 
-    public function getExternalAltId(): int
+    public function getExternalAltId(): string
     {
         return $this->externalAltId;
     }
 
-    public function setExternalAltId(int $externalAltId): static
+    public function setExternalAltId(string $externalAltId): static
     {
         $this->externalAltId = $externalAltId;
 
@@ -98,18 +95,6 @@ class Team
     public function setCountryCode(string $countryCode): static
     {
         $this->countryCode = $countryCode;
-
-        return $this;
-    }
-
-    public function getCountryName(): string
-    {
-        return $this->countryName;
-    }
-
-    public function setCountryName(string $countryName): static
-    {
-        $this->countryName = $countryName;
 
         return $this;
     }
