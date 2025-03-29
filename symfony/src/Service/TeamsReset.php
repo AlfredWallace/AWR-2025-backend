@@ -8,29 +8,21 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class TeamsReset
+readonly class TeamsReset
 {
-    private HttpClientInterface $client;
-    private EntityManagerInterface $entityManager;
-    private ValidatorInterface $validator;
-    private string $apiUrl;
-
     public function __construct(
-        HttpClientInterface $client,
-        EntityManagerInterface $entityManager,
-        ValidatorInterface $validator,
-        string $apiUrl
+        public HttpClientInterface    $client,
+        public EntityManagerInterface $entityManager,
+        public ValidatorInterface     $validator,
+        public TruncateTeams          $truncateTeams,
+        public string                 $apiUrl
     ) {
-        $this->client = $client;
-        $this->entityManager = $entityManager;
-        $this->validator = $validator;
-        $this->apiUrl = $apiUrl;
     }
 
     public function fetchAndPersistTeams(): void
     {
         // 1. Clear existing team data
-        $this->clearExistingTeams();
+        $this->truncateTeams->clearExistingTeams();
 
         // 2. Fetch data from the World Rugby API
         $teamsData = $this->fetchTeamsFromApi();
@@ -40,16 +32,6 @@ class TeamsReset
 
         // 4. Flush all changes
         $this->entityManager->flush();
-    }
-
-    private function clearExistingTeams(): void
-    {
-        $repository = $this->entityManager->getRepository(Team::class);
-        $teams = $repository->findAll();
-
-        foreach ($teams as $team) {
-            $this->entityManager->remove($team);
-        }
     }
 
     private function fetchTeamsFromApi(): array
@@ -75,6 +57,7 @@ class TeamsReset
                 previousPoints: $teamData['previousPts']
             );
 
+            // Validate the team values
             $violations = $this->validator->validate($team);
 
             if ($violations->count() > 0) {

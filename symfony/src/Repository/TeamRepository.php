@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Team;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,13 +22,8 @@ class TeamRepository extends ServiceEntityRepository
         parent::__construct($registry, Team::class);
     }
 
-    public function findOneByExternalId(int $externalId): ?Team
+    public function getEntityManager(): EntityManagerInterface
     {
-        return $this->findOneBy(['externalId' => $externalId]);
-    }
-
-    public function findOneByExternalAltId(int $externalAltId): ?Team
-    {
-        return $this->findOneBy(['externalAltId' => $externalAltId]);
+        return $this->getEntityManager();
     }
 }
