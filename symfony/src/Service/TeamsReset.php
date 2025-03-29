@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Team;
+use App\Exception\TeamValidationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -62,6 +63,8 @@ class TeamsReset
     private function persistTeams(array $teamsData): void
     {
         foreach ($teamsData as $teamData) {
+            $this->validateTeamDataStructure($teamData);
+
             $team = new Team(
                 name: $teamData['team']['name'],
                 abbreviation: $teamData['team']['abbreviation'],
@@ -72,17 +75,36 @@ class TeamsReset
                 previousPoints: $teamData['previousPts']
             );
 
-            $errors = $this->validator->validate($team);
+            $violations = $this->validator->validate($team);
 
-            if (count($errors) > 0) {
-                // Handle validation errors
-                // You might want to log the errors or throw an exception
-                // based on your application's requirements
-                $errorsString = (string) $errors;
-                throw new \Exception("Team validation failed: ".$errorsString);
+            if ($violations->count() > 0) {
+                $errors = [];
+                foreach ($violations as $violation) {
+                    $errors[] = $violation->getMessage();
+                }
+
+                throw new TeamValidationException("Team validation failed: ", context: $errors);
             }
 
             $this->entityManager->persist($team);
+        }
+    }
+
+    private function validateTeamDataStructure(array $teamData): void
+    {
+        $requiredKeys = ['team', 'pts', 'previousPts'];
+        $teamKeys = ['name', 'abbreviation', 'id', 'altId', 'countryCode'];
+
+        foreach ($requiredKeys as $key) {
+            if (!array_key_exists($key, $teamData)) {
+                throw new TeamValidationException("Missing required key: $key", context: $teamData);
+            }
+        }
+
+        foreach ($teamKeys as $key) {
+            if (!array_key_exists($key, $teamData['team'])) {
+                throw new TeamValidationException("Missing required team key: $key", context: $teamData);
+            }
         }
     }
 }
