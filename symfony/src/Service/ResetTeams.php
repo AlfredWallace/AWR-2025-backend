@@ -30,7 +30,7 @@ readonly class ResetTeams
      * @throws DecodingExceptionInterface
      * @throws ClientExceptionInterface
      */
-    public function fetchAndPersistTeams(): void
+    public function resetTeams(): void
     {
         // 1. Clear existing team data
         $this->truncateTeams->clearExistingTeams();
