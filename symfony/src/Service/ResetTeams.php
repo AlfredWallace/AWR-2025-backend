@@ -5,13 +5,17 @@ namespace App\Service;
 use App\Entity\Team;
 use App\Exception\TeamValidationException;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 readonly class ResetTeams
 {
     public function __construct(
-        public HttpClientInterface    $client,
+        public FetchTeams             $fetchTeams,
         public EntityManagerInterface $entityManager,
         public ValidatorInterface     $validator,
         public TruncateTeams          $truncateTeams,
@@ -19,27 +23,26 @@ readonly class ResetTeams
     ) {
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     */
     public function fetchAndPersistTeams(): void
     {
         // 1. Clear existing team data
         $this->truncateTeams->clearExistingTeams();
 
         // 2. Fetch data from the World Rugby API
-        $teamsData = $this->fetchTeamsFromApi();
+        $teamsData = $this->fetchTeams->fetchTeamsFromApi($this->apiUrl);
 
         // 3. Persist the new data
         $this->persistTeams($teamsData);
 
         // 4. Flush all changes
         $this->entityManager->flush();
-    }
-
-    private function fetchTeamsFromApi(): array
-    {
-        $response = $this->client->request('GET', $this->apiUrl);
-        $content = $response->toArray();
-
-        return $content['entries'];
     }
 
     private function persistTeams(array $teamsData): void
@@ -91,4 +94,3 @@ readonly class ResetTeams
         }
     }
 }
-
