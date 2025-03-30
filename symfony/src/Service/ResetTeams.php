@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-readonly class TeamsReset
+readonly class ResetTeams
 {
     public function __construct(
         public HttpClientInterface    $client,
