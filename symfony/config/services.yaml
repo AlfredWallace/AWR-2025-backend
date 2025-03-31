@@ -20,5 +20,9 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\Service\FetchTeams:
+        arguments:
+            $worldRugbyApiEndpoint: '%env(WORLD_RUGBY_API_URL)%'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

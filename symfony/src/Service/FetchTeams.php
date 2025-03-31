@@ -13,7 +13,8 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 readonly class FetchTeams
 {
     public function __construct(
-        private HttpClientInterface $client
+        private HttpClientInterface $client,
+        private string $worldRugbyApiEndpoint
     ) {
     }
 
@@ -25,9 +26,9 @@ readonly class FetchTeams
      * @throws ClientExceptionInterface
      * @throws TeamValidationException
      */
-    public function fetchTeamsFromApi(string $apiUrl): array
+    public function fetchTeamsFromApi(): array
     {
-        $response = $this->client->request('GET', $apiUrl);
+        $response = $this->client->request('GET', $this->worldRugbyApiEndpoint);
         $content = $response->toArray();
 
         if (!array_key_exists('entries', $content)) {

@@ -15,8 +15,7 @@ readonly class ResetTeams
         public FetchTeams $fetchTeams,
         public EntityManagerInterface $entityManager,
         public MakeTeams $makeTeams,
-        public TruncateTeams $truncateTeams,
-        public string $apiUrl
+        public TruncateTeams $truncateTeams
     ) {
     }
 
@@ -33,7 +32,7 @@ readonly class ResetTeams
         $this->truncateTeams->clearExistingTeams();
 
         // 2. Fetch data from the World Rugby API
-        $teamsData = $this->fetchTeams->fetchTeamsFromApi($this->apiUrl);
+        $teamsData = $this->fetchTeams->fetchTeamsFromApi();
 
         // 3. Persist the new data
         $this->makeTeams->persistTeams($teamsData);
@@ -42,3 +41,4 @@ readonly class ResetTeams
         $this->entityManager->flush();
     }
 }
+
