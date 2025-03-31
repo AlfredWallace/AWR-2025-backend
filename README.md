@@ -1,6 +1,6 @@
-# Symfony Docker Demo Project
+# Alfred Wallace Rugby - backend
 
-A demonstration project showcasing PHP 8.4, Symfony 7.x, and PostgreSQL 15.4 in a Docker environment using the Symfony CLI.
+Simulator for rugby union national teams
 
 ## Technologies & Versions
 
