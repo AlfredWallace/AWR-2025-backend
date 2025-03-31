@@ -10,10 +10,9 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 readonly class MakeTeams
 {
     public function __construct(
-        public TeamRepository     $teamRepository,
+        public TeamRepository $teamRepository,
         public ValidatorInterface $validator
-    )
-    {
+    ) {
     }
 
     public function persistTeams(array $teamsData): void

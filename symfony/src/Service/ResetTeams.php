@@ -12,13 +12,12 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 readonly class ResetTeams
 {
     public function __construct(
-        public FetchTeams             $fetchTeams,
+        public FetchTeams $fetchTeams,
         public EntityManagerInterface $entityManager,
-        public MakeTeams              $makeTeams,
-        public TruncateTeams          $truncateTeams,
-        public string                 $apiUrl
-    )
-    {
+        public MakeTeams $makeTeams,
+        public TruncateTeams $truncateTeams,
+        public string $apiUrl
+    ) {
     }
 
     /**
