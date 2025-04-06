@@ -7,8 +7,8 @@ use App\Repository\TeamRepository;
 use App\Service\MakeTeams;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class MakeTeamsTest extends TestCase
 {
@@ -49,43 +49,81 @@ class MakeTeamsTest extends TestCase
             ],
             'missing pts key' => [
                 'teamsData' => [
-                    ['team' => ['name' => 'Team A', 'abbreviation' => 'TA', 'id' => 1, 'altId' => 2, 'countryCode' => 'US'], 'previousPts' => 5]
+                    [
+                        'team' => [
+                            'name' => 'Team A',
+                            'abbreviation' => 'TA',
+                            'id' => 1,
+                            'altId' => 2,
+                            'countryCode' => 'US'
+                        ],
+                        'previousPts' => 5
+                    ]
                 ],
                 'expectedExceptionMessage' => 'Missing required key: pts'
             ],
             'missing previousPts key' => [
                 'teamsData' => [
-                    ['team' => ['name' => 'Team A', 'abbreviation' => 'TA', 'id' => 1, 'altId' => 2, 'countryCode' => 'US'], 'pts' => 10]
+                    [
+                        'team' => [
+                            'name' => 'Team A',
+                            'abbreviation' => 'TA',
+                            'id' => 1,
+                            'altId' => 2,
+                            'countryCode' => 'US'
+                        ],
+                        'pts' => 10
+                    ]
                 ],
                 'expectedExceptionMessage' => 'Missing required key: previousPts'
             ],
             'missing team name key' => [
                 'teamsData' => [
-                    ['team' => ['abbreviation' => 'TA', 'id' => 1, 'altId' => 2, 'countryCode' => 'US'], 'pts' => 10, 'previousPts' => 5]
+                    [
+                        'team' => ['abbreviation' => 'TA', 'id' => 1, 'altId' => 2, 'countryCode' => 'US'],
+                        'pts' => 10,
+                        'previousPts' => 5
+                    ]
                 ],
                 'expectedExceptionMessage' => 'Missing required team key: name'
             ],
             'missing team abbreviation key' => [
                 'teamsData' => [
-                    ['team' => ['name' => 'Team A', 'id' => 1, 'altId' => 2, 'countryCode' => 'US'], 'pts' => 10, 'previousPts' => 5]
+                    [
+                        'team' => ['name' => 'Team A', 'id' => 1, 'altId' => 2, 'countryCode' => 'US'],
+                        'pts' => 10,
+                        'previousPts' => 5
+                    ]
                 ],
                 'expectedExceptionMessage' => 'Missing required team key: abbreviation'
             ],
             'missing team id key' => [
                 'teamsData' => [
-                    ['team' => ['name' => 'Team A', 'abbreviation' => 'TA', 'altId' => 2, 'countryCode' => 'US'], 'pts' => 10, 'previousPts' => 5]
+                    [
+                        'team' => ['name' => 'Team A', 'abbreviation' => 'TA', 'altId' => 2, 'countryCode' => 'US'],
+                        'pts' => 10,
+                        'previousPts' => 5
+                    ]
                 ],
                 'expectedExceptionMessage' => 'Missing required team key: id'
             ],
             'missing team altId key' => [
                 'teamsData' => [
-                    ['team' => ['name' => 'Team A', 'abbreviation' => 'TA', 'id' => 1, 'countryCode' => 'US'], 'pts' => 10, 'previousPts' => 5]
+                    [
+                        'team' => ['name' => 'Team A', 'abbreviation' => 'TA', 'id' => 1, 'countryCode' => 'US'],
+                        'pts' => 10,
+                        'previousPts' => 5
+                    ]
                 ],
                 'expectedExceptionMessage' => 'Missing required team key: altId'
             ],
             'missing team countryCode key' => [
                 'teamsData' => [
-                    ['team' => ['name' => 'Team A', 'abbreviation' => 'TA', 'id' => 1, 'altId' => 2], 'pts' => 10, 'previousPts' => 5]
+                    [
+                        'team' => ['name' => 'Team A', 'abbreviation' => 'TA', 'id' => 1, 'altId' => 2],
+                        'pts' => 10,
+                        'previousPts' => 5
+                    ]
                 ],
                 'expectedExceptionMessage' => 'Missing required team key: countryCode'
             ],
