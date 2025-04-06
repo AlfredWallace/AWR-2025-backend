@@ -5,8 +5,10 @@ namespace App\Tests\Service;
 use App\Exception\TeamValidationException;
 use App\Repository\TeamRepository;
 use App\Service\MakeTeams;
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Validator\ConstraintViolationList;
 
 class MakeTeamsTest extends TestCase
 {
@@ -63,7 +65,58 @@ class MakeTeamsTest extends TestCase
                 ],
                 'expectedExceptionMessage' => 'Missing required team key: name'
             ],
-            // Ajoutez d'autres cas de test si nécessaire
+            'missing team abbreviation key' => [
+                'teamsData' => [
+                    ['team' => ['name' => 'Team A', 'id' => 1, 'altId' => 2, 'countryCode' => 'US'], 'pts' => 10, 'previousPts' => 5]
+                ],
+                'expectedExceptionMessage' => 'Missing required team key: abbreviation'
+            ],
+            'missing team id key' => [
+                'teamsData' => [
+                    ['team' => ['name' => 'Team A', 'abbreviation' => 'TA', 'altId' => 2, 'countryCode' => 'US'], 'pts' => 10, 'previousPts' => 5]
+                ],
+                'expectedExceptionMessage' => 'Missing required team key: id'
+            ],
+            'missing team altId key' => [
+                'teamsData' => [
+                    ['team' => ['name' => 'Team A', 'abbreviation' => 'TA', 'id' => 1, 'countryCode' => 'US'], 'pts' => 10, 'previousPts' => 5]
+                ],
+                'expectedExceptionMessage' => 'Missing required team key: altId'
+            ],
+            'missing team countryCode key' => [
+                'teamsData' => [
+                    ['team' => ['name' => 'Team A', 'abbreviation' => 'TA', 'id' => 1, 'altId' => 2], 'pts' => 10, 'previousPts' => 5]
+                ],
+                'expectedExceptionMessage' => 'Missing required team key: countryCode'
+            ],
         ];
     }
+
+    public function testPersistTeamsValidData(): void
+    {
+        $teamsData = [
+            [
+                'team' => [
+                    'name' => 'Team A',
+                    'abbreviation' => 'TA',
+                    'id' => 1,
+                    'altId' => 2,
+                    'countryCode' => 'US'
+                ],
+                'pts' => 10,
+                'previousPts' => 5
+            ]
+        ];
+
+        $this->validatorMock->method('validate')->willReturn(new ConstraintViolationList());
+
+        $this->teamRepositoryMock->expects($this->once())
+            ->method('getEntityManager')
+            ->willReturn($this->createMock(EntityManagerInterface::class));
+
+        $this->makeTeams->persistTeams($teamsData);
+
+        $this->assertTrue(true); // Si nous arrivons ici, le test a réussi
+    }
 }
+
