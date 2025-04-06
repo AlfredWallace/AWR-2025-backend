@@ -13,8 +13,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class MakeTeamsTest extends TestCase
 {
     private MakeTeams $makeTeams;
-    private $teamRepositoryMock;
-    private $validatorMock;
+    private TeamRepository $teamRepositoryMock;
+    private ValidatorInterface $validatorMock;
 
     protected function setUp(): void
     {
