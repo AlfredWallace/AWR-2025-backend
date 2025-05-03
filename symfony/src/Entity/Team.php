@@ -13,7 +13,7 @@ class Team
         #[ORM\Id]
         #[ORM\GeneratedValue]
         #[ORM\Column]
-        readonly ?int $id = null,
+        private(set) ?int $id = null,
 
         #[ORM\Column(length: 255)]
         #[Assert\NotBlank]
