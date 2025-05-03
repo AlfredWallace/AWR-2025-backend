@@ -24,6 +24,6 @@ class TeamRepository extends ServiceEntityRepository
 
     public function getEntityManager(): EntityManagerInterface
     {
-        return $this->getEntityManager();
+        return parent::getEntityManager();
     }
 }
