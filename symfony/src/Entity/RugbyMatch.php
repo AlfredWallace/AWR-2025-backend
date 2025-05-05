@@ -42,10 +42,7 @@ class RugbyMatch
         
         #[ORM\ManyToOne(targetEntity: Simulation::class, inversedBy: "matches")]
         #[ORM\JoinColumn(nullable: false)]
-        private(set) ?Simulation $simulation = null,
-        
-        #[ORM\Column(type: "float")]
-        readonly float $pointsExchanged = 0.0
+        private(set) ?Simulation $simulation = null
     ) {
     }
     
