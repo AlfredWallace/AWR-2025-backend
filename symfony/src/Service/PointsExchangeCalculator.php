@@ -6,25 +6,10 @@ use App\Entity\RugbyMatch;
 
 class PointsExchangeCalculator
 {
-    /**
-     * Maximum points difference to consider in calculations
-     */
     private const float RATING_CAP = 10.0;
-    
-    /**
-     * Home advantage in rating points
-     */
     private const float HOME_ADVANTAGE = 3.0;
-    
-    /**
-     * Weight multipliers
-     */
     private const float WEIGHT_WORLD_CUP = 2.0;
     private const float WEIGHT_LARGE_VICTORY = 1.5;
-    
-    /**
-     * Score difference threshold for large victory
-     */
     private const int LARGE_VICTORY_THRESHOLD = 15;
     
     /**
