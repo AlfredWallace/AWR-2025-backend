@@ -12,11 +12,8 @@ class Simulation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: "string", unique: true)]
-    private(set) string $id;
-
     #[ORM\Column]
-    readonly \DateTimeImmutable $createdAt;
+    private(set) ?int $id;
 
     #[ORM\OneToMany(targetEntity: RugbyMatch::class, mappedBy: "simulation", cascade: ["persist", "remove"])]
     #[ORM\OrderBy(["order" => "ASC"])]
@@ -29,7 +26,6 @@ class Simulation
         #[ORM\Column(length: 255, nullable: true)]
         readonly ?string $name = null
     ) {
-        $this->createdAt = new \DateTimeImmutable();
         $this->matches = new ArrayCollection();
         $this->teamPoints = new ArrayCollection();
     }
