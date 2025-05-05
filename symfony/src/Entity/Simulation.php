@@ -27,10 +27,7 @@ class Simulation
 
     public function __construct(
         #[ORM\Column(length: 255, nullable: true)]
-        readonly ?string $name = null,
-        
-        #[ORM\Column]
-        readonly int $maxSteps = 0
+        readonly ?string $name = null
     ) {
         $this->createdAt = new \DateTimeImmutable();
         $this->matches = new ArrayCollection();
