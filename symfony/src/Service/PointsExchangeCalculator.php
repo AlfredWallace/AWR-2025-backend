@@ -17,12 +17,15 @@ class PointsExchangeCalculator
     private const float HOME_ADVANTAGE = 3.0;
     
     /**
-     * Weight for different match types
+     * Weight multipliers
      */
     private const float WEIGHT_WORLD_CUP = 2.0;
-    private const float WEIGHT_NATIONS_CUP = 1.5;
-    private const float WEIGHT_MAJOR_TOURNAMENT = 1.5;
-    private const float WEIGHT_STANDARD = 1.0;
+    private const float WEIGHT_LARGE_VICTORY = 1.5;
+    
+    /**
+     * Score difference threshold for large victory
+     */
+    private const int LARGE_VICTORY_THRESHOLD = 15;
     
     /**
      * Calculate the points exchanged between two teams for a rugby match.
@@ -65,13 +68,17 @@ class PointsExchangeCalculator
             $awayActualOutcome = 0.5;
         }
         
-        // Step 6: Get match weight based on tournament importance
+        // Step 6: Calculate base points exchange
+        $baseHomePointsChange = $homeActualOutcome - $homeExpectedWin;
+        $baseAwayPointsChange = $awayActualOutcome - $awayExpectedWin;
+        
+        // Step 7: Apply weighting rules
         $weight = $this->getMatchWeight($match);
         
-        // Step 7: Calculate points exchange
+        // Step 8: Calculate final points exchange
         // Points gained = weight * (actual outcome - expected outcome)
-        $homePointsChange = $weight * ($homeActualOutcome - $homeExpectedWin);
-        $awayPointsChange = $weight * ($awayActualOutcome - $awayExpectedWin);
+        $homePointsChange = $weight * $baseHomePointsChange;
+        $awayPointsChange = $weight * $baseAwayPointsChange;
         
         // Round to 2 decimal places
         return [
@@ -81,22 +88,26 @@ class PointsExchangeCalculator
     }
     
     /**
-     * Get the weight multiplier based on the match type/importance.
+     * Get the weight multiplier based on the match type and result margin.
+     * 
+     * Rules:
+     * 1. If one side has won by more than 15 points, multiply by 1.5
+     * 2. If the match was part of the World Cup Finals, double the Rating Change
      */
     private function getMatchWeight(RugbyMatch $match): float
     {
+        $weight = 1.0;
+        
+        // Apply large victory multiplier if appropriate
+        if (abs($match->homeScore - $match->awayScore) > self::LARGE_VICTORY_THRESHOLD) {
+            $weight *= self::WEIGHT_LARGE_VICTORY;
+        }
+        
+        // Apply World Cup multiplier if appropriate
         if ($match->isWorldCup) {
-            return self::WEIGHT_WORLD_CUP;
+            $weight *= self::WEIGHT_WORLD_CUP;
         }
         
-        if (property_exists($match, 'isNationsCup') && $match->isNationsCup) {
-            return self::WEIGHT_NATIONS_CUP;
-        }
-        
-        if (property_exists($match, 'isMajorTournament') && $match->isMajorTournament) {
-            return self::WEIGHT_MAJOR_TOURNAMENT;
-        }
-        
-        return self::WEIGHT_STANDARD;
+        return $weight;
     }
 }
