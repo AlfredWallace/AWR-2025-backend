@@ -35,6 +35,9 @@ class RugbyMatch
         readonly int $awayScore = 0,
         
         #[ORM\Column]
+        readonly bool $isNeutralGround = false,
+        
+        #[ORM\Column]
         readonly bool $isWorldCup = false,
         
         #[ORM\Column]
