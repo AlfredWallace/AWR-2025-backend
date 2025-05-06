@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Entity\RugbyMatch;
 
-class PointsExchangeCalculator
+readonly class PointsExchangeCalculator
 {
     private const float RATING_CAP = 10.0;
     private const float HOME_ADVANTAGE = 3.0;
@@ -64,11 +64,10 @@ class PointsExchangeCalculator
         // Points gained = weight * (actual outcome - expected outcome)
         $homePointsChange = $weight * $baseHomePointsChange;
         $awayPointsChange = $weight * $baseAwayPointsChange;
-        
-        // Round to 2 decimal places
+
         return [
-            'homePoints' => round($homePointsChange, 2),
-            'awayPoints' => round($awayPointsChange, 2)
+            'homePoints' => $homePointsChange,
+            'awayPoints' => $awayPointsChange
         ];
     }
     
