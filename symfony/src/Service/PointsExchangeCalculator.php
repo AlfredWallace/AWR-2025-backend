@@ -17,21 +17,23 @@ readonly class PointsExchangeCalculator
      * Based on World Rugby's official ranking calculation system.
      * 
      * @param RugbyMatch $match The match object containing teams and scores
-     * @param float $homeTeamPoints Rating points of the home team before the match
-     * @param float $awayTeamPoints Rating points of the away team before the match
+     * @param float $homeTeamRanking Rating of the home team before the match
+     * @param float $awayTeamRanking Rating of the away team before the match
      * 
      * @return array{homePoints: float, awayPoints: float} Points gained/lost by each team
      */
     public function calculateExchangedPoints(
         RugbyMatch $match, 
-        float $homeTeamPoints, 
-        float $awayTeamPoints
+        float $homeTeamRanking,
+        float $awayTeamRanking
     ): array {
-        // Step 1: Apply home advantage to home team's rating
-        $homeTeamEffectiveRating = $homeTeamPoints + self::HOME_ADVANTAGE;
+        // Step 1: Apply home advantage to home team's rating (only if not on neutral ground)
+        $homeTeamEffectiveRating = $match->isNeutralGround 
+            ? $homeTeamRanking
+            : $homeTeamRanking + self::HOME_ADVANTAGE;
         
         // Step 2: Calculate rating difference with home advantage applied
-        $ratingDifference = $homeTeamEffectiveRating - $awayTeamPoints;
+        $ratingDifference = $homeTeamEffectiveRating - $awayTeamRanking;
         
         // Step 3: Apply rating cap (max 10 points difference considered)
         $cappedRatingDifference = max(-self::RATING_CAP, min(self::RATING_CAP, $ratingDifference));
