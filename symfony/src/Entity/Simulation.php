@@ -13,7 +13,7 @@ class Simulation
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private(set) ?int $id;
+    private(set) int $id;
 
     #[ORM\OneToMany(targetEntity: RugbyMatch::class, mappedBy: "simulation", cascade: ["persist", "remove"])]
     #[ORM\OrderBy(["order" => "ASC"])]
@@ -23,8 +23,8 @@ class Simulation
     readonly Collection $teamPoints;
 
     public function __construct(
-        #[ORM\Column(length: 255, nullable: true)]
-        readonly ?string $name = null
+        #[ORM\Column]
+        readonly string $name
     ) {
         $this->matches = new ArrayCollection();
         $this->teamPoints = new ArrayCollection();
