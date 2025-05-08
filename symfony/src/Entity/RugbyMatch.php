@@ -10,29 +10,28 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: "rugby_match")]
 class RugbyMatch
 {
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private(set) int $id;
+
     public function __construct(
-        #[ORM\Id]
-        #[ORM\GeneratedValue]
-        #[ORM\Column]
-        private(set) ?int $id = null,
         
         #[ORM\ManyToOne(targetEntity: Team::class)]
         #[ORM\JoinColumn(nullable: false)]
-        #[Assert\NotNull]
-        readonly ?Team $homeTeam = null,
+        readonly Team $homeTeam,
         
         #[ORM\ManyToOne(targetEntity: Team::class)]
         #[ORM\JoinColumn(nullable: false)]
-        #[Assert\NotNull]
-        readonly ?Team $awayTeam = null,
+        readonly Team $awayTeam,
         
         #[ORM\Column]
         #[Assert\GreaterThanOrEqual(0)]
-        readonly int $homeScore = 0,
+        readonly int $homeScore,
         
         #[ORM\Column]
         #[Assert\GreaterThanOrEqual(0)]
-        readonly int $awayScore = 0,
+        readonly int $awayScore,
         
         #[ORM\Column]
         readonly bool $isNeutralGround = false,
@@ -41,11 +40,11 @@ class RugbyMatch
         readonly bool $isWorldCup = false,
         
         #[ORM\Column]
-        readonly int $order = 0,
+        readonly int $order,
         
         #[ORM\ManyToOne(targetEntity: Simulation::class, inversedBy: "matches")]
         #[ORM\JoinColumn(nullable: false)]
-        private(set) ?Simulation $simulation = null
+        private(set) Simulation $simulation
     ) {
     }
     
