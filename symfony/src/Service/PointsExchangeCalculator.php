@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\RugbyMatch;
+use App\Repository\TeamPointsRepository;
 
 readonly class PointsExchangeCalculator
 {
@@ -12,21 +13,43 @@ readonly class PointsExchangeCalculator
     private const float WEIGHT_LARGE_VICTORY = 1.5;
     private const int LARGE_VICTORY_THRESHOLD = 15;
     
+    public function __construct(
+        private TeamPointsRepository $teamPointsRepository
+    ) {
+    }
+    
     /**
      * Calculate the points exchanged between two teams for a rugby match.
      * Based on World Rugby's official ranking calculation system.
      * 
      * @param RugbyMatch $match The match object containing teams and scores
-     * @param float $homeTeamRanking Rating of the home team before the match
-     * @param float $awayTeamRanking Rating of the away team before the match
      * 
      * @return array{homePoints: float, awayPoints: float} Points gained/lost by each team
      */
-    public function calculateExchangedPoints(
-        RugbyMatch $match, 
-        float $homeTeamRanking,
-        float $awayTeamRanking
-    ): array {
+    public function calculateExchangedPoints(RugbyMatch $match): array
+    {
+        $simulation = $match->getSimulation();
+        $homeTeam = $match->homeTeam;
+        $awayTeam = $match->awayTeam;
+        $matchOrder = $match->order;
+        
+        // Find the most recent team points entries before this match
+        $homeTeamSimulationLastPoints = $this->teamPointsRepository->findMostRecentTeamPointsBeforeOrder(
+            $simulation,
+            $homeTeam,
+            $matchOrder
+        );
+        
+        $awayTeamSimulationLastPoints = $this->teamPointsRepository->findMostRecentTeamPointsBeforeOrder(
+            $simulation,
+            $awayTeam,
+            $matchOrder
+        );
+        
+        // If no previous points found in simulation, use the team's base points
+        $homeTeamRanking = $homeTeamSimulationLastPoints ? $homeTeamSimulationLastPoints->points : $homeTeam->points;
+        $awayTeamRanking = $awayTeamSimulationLastPoints ? $awayTeamSimulationLastPoints->points : $awayTeam->points;
+        
         // Step 1: Apply home advantage to home team's rating (only if not on neutral ground)
         $homeTeamEffectiveRating = $match->isNeutralGround 
             ? $homeTeamRanking

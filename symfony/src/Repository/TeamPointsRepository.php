@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\Simulation;
+use App\Entity\Team;
 use App\Entity\TeamPoints;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,14 +32,14 @@ class TeamPointsRepository extends ServiceEntityRepository
     /**
      * Find the most recent TeamPoints entry for a team in a simulation before a specific order
      */
-    public function findMostRecentTeamPointsBeforeOrder(int $simulationId, int $teamId, int $order): ?TeamPoints
+    public function findMostRecentTeamPointsBeforeOrder(Simulation $simulation, Team $team, int $order): ?TeamPoints
     {
         return $this->createQueryBuilder('tp')
-            ->where('tp.simulation = :simulationId')
-            ->andWhere('tp.team = :teamId')
+            ->where('tp.simulation = :simulation')
+            ->andWhere('tp.team = :team')
             ->andWhere('tp.order < :order')
-            ->setParameter('simulationId', $simulationId)
-            ->setParameter('teamId', $teamId)
+            ->setParameter('simulation', $simulation)
+            ->setParameter('team', $team)
             ->setParameter('order', $order)
             ->orderBy('tp.order', 'DESC')
             ->setMaxResults(1)
