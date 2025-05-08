@@ -9,40 +9,33 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
 class Team
 {
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private(set) int $id;
+
     public function __construct(
-        #[ORM\Id]
-        #[ORM\GeneratedValue]
         #[ORM\Column]
-        private(set) ?int $id = null,
-
-        #[ORM\Column(length: 255)]
-        #[Assert\NotBlank]
-        readonly ?string $name = null,
+        readonly string $name,
 
         #[ORM\Column(length: 10)]
-        #[Assert\NotBlank]
-        private(set) ?string $abbreviation = null,
+        private(set) string $abbreviation,
 
         #[ORM\Column]
-        #[Assert\NotBlank]
-        readonly ?string $externalId = null,
+        readonly string $externalId,
 
         #[ORM\Column]
-        #[Assert\NotBlank]
-        readonly ?string $externalAltId = null,
+        readonly string $externalAltId,
 
         #[ORM\Column(length: 10)]
-        #[Assert\NotBlank]
         #[Assert\Length(max: 3)]
-        private(set) ?string $countryCode = null,
+        private(set) string $countryCode,
 
         #[ORM\Column(type: "float")]
-        #[Assert\NotBlank]
-        readonly ?float $points = null,
+        readonly float $points,
 
         #[ORM\Column(type: "float")]
-        #[Assert\NotBlank]
-        readonly ?float $previousPoints = null
+        readonly float $previousPoints
     ) {
         $this->abbreviation = strtoupper($abbreviation);
         $this->countryCode = strtoupper($countryCode);
