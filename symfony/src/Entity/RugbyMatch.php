@@ -8,6 +8,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RugbyMatchRepository::class)]
 #[ORM\Table(name: "rugby_match")]
+#[ORM\UniqueConstraint(
+    name: "unique_simulation_order", 
+    columns: ["simulation_id", "order"]
+)]
+#[ORM\Index(name: "idx_simulation_order", columns: ["simulation_id", "order"])]
 class RugbyMatch
 {
     #[ORM\Id]
