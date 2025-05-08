@@ -53,9 +53,4 @@ class RugbyMatch
         $this->simulation = $simulation;
         return $this;
     }
-    
-    public function getSimulation(): ?Simulation
-    {
-        return $this->simulation;
-    }
 }

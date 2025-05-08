@@ -28,7 +28,7 @@ readonly class PointsExchangeCalculator
      */
     public function calculateExchangedPoints(RugbyMatch $match): array
     {
-        $simulation = $match->getSimulation();
+        $simulation = $match->simulation;
         $homeTeam = $match->homeTeam;
         $awayTeam = $match->awayTeam;
         $matchOrder = $match->order;
