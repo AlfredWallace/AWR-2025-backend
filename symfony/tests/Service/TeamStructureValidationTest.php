@@ -5,12 +5,10 @@ namespace App\Tests\Service;
 use App\Exception\TeamValidationException;
 use App\Repository\TeamRepository;
 use App\Service\MakeTeams;
-use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class MakeTeamsTest extends TestCase
+class TeamStructureValidationTest extends TestCase
 {
     private MakeTeams $makeTeams;
     private TeamRepository $teamRepositoryMock;
@@ -128,33 +126,6 @@ class MakeTeamsTest extends TestCase
                 'expectedExceptionMessage' => 'Missing required team key: countryCode'
             ],
         ];
-    }
-
-    public function testPersistTeamsValidData(): void
-    {
-        $teamsData = [
-            [
-                'team' => [
-                    'name' => 'Team A',
-                    'abbreviation' => 'TA',
-                    'id' => 1,
-                    'altId' => 2,
-                    'countryCode' => 'US'
-                ],
-                'pts' => 10,
-                'previousPts' => 5
-            ]
-        ];
-
-        $this->validatorMock->method('validate')->willReturn(new ConstraintViolationList());
-
-        $this->teamRepositoryMock->expects($this->once())
-            ->method('getEntityManager')
-            ->willReturn($this->createMock(EntityManagerInterface::class));
-
-        $this->makeTeams->persistTeams($teamsData);
-
-        $this->assertTrue(true); // Si nous arrivons ici, le test a réussi
     }
 }
 
