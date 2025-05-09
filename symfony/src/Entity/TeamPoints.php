@@ -13,29 +13,30 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: "idx_simulation_order", columns: ["simulation_id", "order"])]
 class TeamPoints
 {
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private(set) int $id;
+
     public function __construct(
-        #[ORM\Id]
-        #[ORM\GeneratedValue]
-        #[ORM\Column]
-        private(set) ?int $id = null,
         
         #[ORM\ManyToOne(targetEntity: Team::class)]
         #[ORM\JoinColumn(nullable: false)]
-        readonly ?Team $team = null,
+        readonly Team $team,
         
         #[ORM\ManyToOne(targetEntity: Simulation::class, inversedBy: "teamPoints")]
         #[ORM\JoinColumn(nullable: false)]
-        private(set) ?Simulation $simulation = null,
+        private(set) Simulation $simulation,
         
         #[ORM\Column]
-        readonly int $order = 0,
+        readonly int $order,
         
         #[ORM\Column(type: "float")]
-        readonly float $points = 0.0
+        readonly float $points
     ) {
     }
     
-    public function setSimulation(?Simulation $simulation): self
+    public function setSimulation(Simulation $simulation): self
     {
         $this->simulation = $simulation;
         return $this;
