@@ -53,7 +53,7 @@ class RugbyMatch
     ) {
     }
     
-    public function setSimulation(?Simulation $simulation): self
+    public function setSimulation(Simulation $simulation): self
     {
         $this->simulation = $simulation;
         return $this;
