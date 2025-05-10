@@ -5,7 +5,7 @@ namespace App\Service;
 use App\Entity\RugbyMatch;
 use App\Repository\TeamPointsRepository;
 
-readonly class PointsExchangeCalculator
+readonly class RugbyMatchPointsCalculator
 {
     private const float RATING_CAP = 10.0;
     private const float HOME_ADVANTAGE = 3.0;
@@ -28,7 +28,7 @@ readonly class PointsExchangeCalculator
      * 
      * @return array{homePoints: float, awayPoints: float} Points gained/lost by each team
      */
-    public function calculateExchangedPoints(RugbyMatch $match): array
+    public function calculatePoints(RugbyMatch $match): array
     {
         $simulation = $match->simulation;
         $homeTeam = $match->homeTeam;
