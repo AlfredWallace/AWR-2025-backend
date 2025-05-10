@@ -21,6 +21,8 @@ readonly class PointsExchangeCalculator
     /**
      * Calculate the points exchanged between two teams for a rugby match.
      * Based on World Rugby's official ranking calculation system.
+     * This function extracts data from the RugbyMatch object, delegates to the algorithm,
+     * and applies the points exchange to the correct teams.
      * 
      * @param RugbyMatch $match The match object containing teams and scores
      * 
@@ -50,8 +52,73 @@ readonly class PointsExchangeCalculator
         $homeTeamRanking = $homeTeamSimulationLastPoints ? $homeTeamSimulationLastPoints->points : $homeTeam->points;
         $awayTeamRanking = $awayTeamSimulationLastPoints ? $awayTeamSimulationLastPoints->points : $awayTeam->points;
         
+        // Get the points to be exchanged from the algorithm
+        $pointsToExchange = $this->calculatePointsExchange(
+            $homeTeamRanking,
+            $awayTeamRanking,
+            $match->homeScore,
+            $match->awayScore,
+            $match->isNeutralGround,
+            $match->isWorldCup
+        );
+        
+        // Determine who gets the points based on the match result using match expression
+        [$homePointsChange, $awayPointsChange] = match (true) {
+            // Home team won
+            $match->homeScore > $match->awayScore => [
+                $pointsToExchange, 
+                -$pointsToExchange
+            ],
+            
+            // Away team won
+            $match->homeScore < $match->awayScore => [
+                -$pointsToExchange, 
+                $pointsToExchange
+            ],
+            
+            // Draw - points are still exchanged based on the pre-match rankings
+            $homeTeamRanking > $awayTeamRanking => [
+                -$pointsToExchange,  // Home team was higher-ranked, they lose points
+                $pointsToExchange
+            ],
+            $homeTeamRanking < $awayTeamRanking => [
+                $pointsToExchange,   // Away team was higher-ranked, they lose points
+                -$pointsToExchange
+            ],
+            
+            // Teams were equally ranked, no points exchanged
+            default => [0.0, 0.0]
+        };
+        
+        return [
+            'homePoints' => $homePointsChange,
+            'awayPoints' => $awayPointsChange
+        ];
+    }
+    
+    /**
+     * Pure algorithmic function to calculate points exchange based on numeric parameters.
+     * Returns a single value representing the points to be exchanged between teams.
+     * 
+     * @param float $homeTeamRanking     Home team's current ranking points
+     * @param float $awayTeamRanking     Away team's current ranking points
+     * @param int $homeScore             Home team's score in the match
+     * @param int $awayScore             Away team's score in the match
+     * @param bool $isNeutralGround      Whether the match is played on neutral ground
+     * @param bool $isWorldCup           Whether the match is part of the World Cup
+     * 
+     * @return float Points to be exchanged between teams
+     */
+    private function calculatePointsExchange(
+        float $homeTeamRanking,
+        float $awayTeamRanking,
+        int $homeScore,
+        int $awayScore,
+        bool $isNeutralGround,
+        bool $isWorldCup
+    ): float {
         // Step 1: Apply home advantage to home team's rating (only if not on neutral ground)
-        $homeTeamEffectiveRating = $match->isNeutralGround 
+        $homeTeamEffectiveRating = $isNeutralGround 
             ? $homeTeamRanking
             : $homeTeamRanking + self::HOME_ADVANTAGE;
         
@@ -64,59 +131,34 @@ readonly class PointsExchangeCalculator
         // Step 4: Calculate expected outcome for home team
         // Formula: 1 / (1 + 10^(-ratingDiff/10))
         $homeExpectedWin = 1 / (1 + pow(10, -$cappedRatingDifference / 10));
-        $awayExpectedWin = 1 - $homeExpectedWin;
         
         // Step 5: Determine actual match outcome (1 for win, 0.5 for draw, 0 for loss)
-        if ($match->homeScore > $match->awayScore) {
+        if ($homeScore > $awayScore) {
             $homeActualOutcome = 1;
-            $awayActualOutcome = 0;
-        } elseif ($match->homeScore < $match->awayScore) {
+        } elseif ($homeScore < $awayScore) {
             $homeActualOutcome = 0;
-            $awayActualOutcome = 1;
         } else {
             $homeActualOutcome = 0.5;
-            $awayActualOutcome = 0.5;
         }
         
         // Step 6: Calculate base points exchange
-        $baseHomePointsChange = $homeActualOutcome - $homeExpectedWin;
-        $baseAwayPointsChange = $awayActualOutcome - $awayExpectedWin;
+        $basePointsExchange = abs($homeActualOutcome - $homeExpectedWin);
         
-        // Step 7: Apply weighting rules
-        $weight = $this->getMatchWeight($match);
-        
-        // Step 8: Calculate final points exchange
-        // Points gained = weight * (actual outcome - expected outcome)
-        $homePointsChange = $weight * $baseHomePointsChange;
-        $awayPointsChange = $weight * $baseAwayPointsChange;
-
-        return [
-            'homePoints' => $homePointsChange,
-            'awayPoints' => $awayPointsChange
-        ];
-    }
-    
-    /**
-     * Get the weight multiplier based on the match type and result margin.
-     * 
-     * Rules:
-     * 1. If one side has won by more than 15 points, multiply by 1.5
-     * 2. If the match was part of the World Cup Finals, double the Rating Change
-     */
-    private function getMatchWeight(RugbyMatch $match): float
-    {
+        // Step 7: Calculate weight based on match circumstances
         $weight = 1.0;
         
         // Apply large victory multiplier if appropriate
-        if (abs($match->homeScore - $match->awayScore) > self::LARGE_VICTORY_THRESHOLD) {
+        if (abs($homeScore - $awayScore) > self::LARGE_VICTORY_THRESHOLD) {
             $weight *= self::WEIGHT_LARGE_VICTORY;
         }
         
         // Apply World Cup multiplier if appropriate
-        if ($match->isWorldCup) {
+        if ($isWorldCup) {
             $weight *= self::WEIGHT_WORLD_CUP;
         }
         
-        return $weight;
+        // Step 8: Calculate final points to exchange
+        return $weight * $basePointsExchange;
     }
+    
 }
