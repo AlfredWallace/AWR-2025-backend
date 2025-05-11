@@ -26,8 +26,8 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
     ): void {
         // Calculate points exchange
         $pointsExchanged = $this->calculator->calculateExchangedPoints(
-            92.77, // South Africa
-            90.36, // New Zealand
+            92.777351682669, // South Africa
+            90.362919014871, // New Zealand
             $homeScore,
             $awayScore,
             $isNeutralGround,
@@ -58,13 +58,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 false, // isWorldCup
                 0.459, // expectedPointsExchange
                 // Calculation:
-                // 1. Home advantage applied: 92.77 + 3 = 95.77
-                // 2. Rating difference: 95.77 - 90.36 = 5.41
-                // 3. Rating difference capped at 10: 5.41 (unchanged)
-                // 4. Rating factor: 5.41 / 10 = 0.541
-                // 5. Home team wins, so P = 1 - D/10 = 1 - 0.541 = 0.459
+                // 1. Home advantage applied: 92.777351682669 + 3 = 95.777351682669
+                // 2. Rating difference: 95.777351682669 - 90.362919014871 = 5.414432667798
+                // 3. Rating difference capped at 10: 5.414432667798 (unchanged)
+                // 4. Rating factor: 5.414432667798 / 10 = 0.5414432667798
+                // 5. Home team wins, so P = 1 - D/10 = 1 - 0.5414432667798 = 0.4585567332202
                 // 6. No large victory (27-20 = 7 points difference < 15), no World Cup, so weight = 1.0
-                // 7. Final points exchange = 0.459 * 1.0 = 0.459
+                // 7. Final points exchange = 0.4585567332202 * 1.0 = 0.459
             ],
             'SA loses at home' => [
                 15, // homeScore
@@ -73,13 +73,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 false, // isWorldCup
                 -1.541, // expectedPointsExchange
                 // Calculation:
-                // 1. Home advantage applied: 92.77 + 3 = 95.77
-                // 2. Rating difference: 95.77 - 90.36 = 5.41
-                // A3. Rating difference capped at 10: 5.41 (unchanged)
-                // 4. Rating factor: 5.41 / 10 = 0.541
-                // 5. Home team loses, so P = -(1 + D/10) = -(1 + 0.541) = -1.541
+                // 1. Home advantage applied: 92.777351682669 + 3 = 95.777351682669
+                // 2. Rating difference: 95.777351682669 - 90.362919014871 = 5.414432667798
+                // 3. Rating difference capped at 10: 5.414432667798 (unchanged)
+                // 4. Rating factor: 5.414432667798 / 10 = 0.5414432667798
+                // 5. Home team loses, so P = -(1 + D/10) = -(1 + 0.5414432667798) = -1.5414432667798
                 // 6. No large victory (25-15 = 10 points difference < 15), no World Cup, so weight = 1.0
-                // 7. Final points exchange = -1.541 * 1.0 = -1.541
+                // 7. Final points exchange = -1.5414432667798 * 1.0 = -1.541
             ],
             'Draw at home' => [
                 20, // homeScore
@@ -88,13 +88,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 false, // isWorldCup
                 -0.541, // expectedPointsExchange
                 // Calculation:
-                // 1. Home advantage applied: 92.77 + 3 = 95.77
-                // 2. Rating difference: 95.77 - 90.36 = 5.41
-                // 3. Rating difference capped at 10: 5.41 (unchanged)
-                // 4. Rating factor: 5.41 / 10 = 0.541
-                // 5. Draw, so P = -D/10 = -0.541
+                // 1. Home advantage applied: 92.777351682669 + 3 = 95.777351682669
+                // 2. Rating difference: 95.777351682669 - 90.362919014871 = 5.414432667798
+                // 3. Rating difference capped at 10: 5.414432667798 (unchanged)
+                // 4. Rating factor: 5.414432667798 / 10 = 0.5414432667798
+                // 5. Draw, so P = -D/10 = -0.5414432667798
                 // 6. No World Cup, so weight = 1.0
-                // 7. Final points exchange = -0.541 * 1.0 = -0.541
+                // 7. Final points exchange = -0.5414432667798 * 1.0 = -0.541
             ],
             'SA wins at neutral ground' => [
                 27, // homeScore
@@ -103,13 +103,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 false, // isWorldCup
                 0.759, // expectedPointsExchange
                 // Calculation:
-                // 1. Neutral ground, so no home advantage: 92.77 (unchanged)
-                // 2. Rating difference: 92.77 - 90.36 = 2.41
-                // 3. Rating difference capped at 10: 2.41 (unchanged)
-                // 4. Rating factor: 2.41 / 10 = 0.241
-                // 5. Home team wins, so P = 1 - D/10 = 1 - 0.241 = 0.759
+                // 1. Neutral ground, so no home advantage: 92.777351682669 (unchanged)
+                // 2. Rating difference: 92.777351682669 - 90.362919014871 = 2.414432667798
+                // 3. Rating difference capped at 10: 2.414432667798 (unchanged)
+                // 4. Rating factor: 2.414432667798 / 10 = 0.2414432667798
+                // 5. Home team wins, so P = 1 - D/10 = 1 - 0.2414432667798 = 0.7585567332202
                 // 6. No large victory (27-20 = 7 points difference < 15), no World Cup, so weight = 1.0
-                // 7. Final points exchange = 0.759 * 1.0 = 0.759
+                // 7. Final points exchange = 0.7585567332202 * 1.0 = 0.759
             ],
             'SA loses at neutral ground' => [
                 15, // homeScore
@@ -118,13 +118,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 false, // isWorldCup
                 -1.241, // expectedPointsExchange
                 // Calculation:
-                // 1. Neutral ground, so no home advantage: 92.77 (unchanged)
-                // 2. Rating difference: 92.77 - 90.36 = 2.41
-                // 3. Rating difference capped at 10: 2.41 (unchanged)
-                // 4. Rating factor: 2.41 / 10 = 0.241
-                // 5. Home team loses, so P = -(1 + D/10) = -(1 + 0.241) = -1.241
+                // 1. Neutral ground, so no home advantage: 92.777351682669 (unchanged)
+                // 2. Rating difference: 92.777351682669 - 90.362919014871 = 2.414432667798
+                // 3. Rating difference capped at 10: 2.414432667798 (unchanged)
+                // 4. Rating factor: 2.414432667798 / 10 = 0.2414432667798
+                // 5. Home team loses, so P = -(1 + D/10) = -(1 + 0.2414432667798) = -1.2414432667798
                 // 6. No large victory (25-15 = 10 points difference < 15), no World Cup, so weight = 1.0
-                // 7. Final points exchange = -1.241 * 1.0 = -1.241
+                // 7. Final points exchange = -1.2414432667798 * 1.0 = -1.241
             ],
             'Draw at neutral ground' => [
                 20, // homeScore
@@ -133,13 +133,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 false, // isWorldCup
                 -0.241, // expectedPointsExchange
                 // Calculation:
-                // 1. Neutral ground, so no home advantage: 92.77 (unchanged)
-                // 2. Rating difference: 92.77 - 90.36 = 2.41
-                // 3. Rating difference capped at 10: 2.41 (unchanged)
-                // 4. Rating factor: 2.41 / 10 = 0.241
-                // 5. Draw, so P = -D/10 = -0.241
+                // 1. Neutral ground, so no home advantage: 92.777351682669 (unchanged)
+                // 2. Rating difference: 92.777351682669 - 90.362919014871 = 2.414432667798
+                // 3. Rating difference capped at 10: 2.414432667798 (unchanged)
+                // 4. Rating factor: 2.414432667798 / 10 = 0.2414432667798
+                // 5. Draw, so P = -D/10 = -0.2414432667798
                 // 6. No World Cup, so weight = 1.0
-                // 7. Final points exchange = -0.241 * 1.0 = -0.241
+                // 7. Final points exchange = -0.2414432667798 * 1.0 = -0.241
             ],
             'SA wins big at home' => [
                 35, // homeScore
@@ -148,13 +148,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 false, // isWorldCup
                 0.6885, // expectedPointsExchange
                 // Calculation:
-                // 1. Home advantage applied: 92.77 + 3 = 95.77
-                // 2. Rating difference: 95.77 - 90.36 = 5.41
-                // 3. Rating difference capped at 10: 5.41 (unchanged)
-                // 4. Rating factor: 5.41 / 10 = 0.541
-                // 5. Home team wins, so P = 1 - D/10 = 1 - 0.541 = 0.459
+                // 1. Home advantage applied: 92.777351682669 + 3 = 95.777351682669
+                // 2. Rating difference: 95.777351682669 - 90.362919014871 = 5.414432667798
+                // 3. Rating difference capped at 10: 5.414432667798 (unchanged)
+                // 4. Rating factor: 5.414432667798 / 10 = 0.5414432667798
+                // 5. Home team wins, so P = 1 - D/10 = 1 - 0.5414432667798 = 0.4585567332202
                 // 6. Large victory (35-10 = 25 points difference > 15), so weight = 1.5
-                // 7. Final points exchange = 0.459 * 1.5 = 0.6885
+                // 7. Final points exchange = 0.4585567332202 * 1.5 = 0.6885
             ],
             'SA loses big at home' => [
                 10, // homeScore
@@ -163,13 +163,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 false, // isWorldCup
                 -2.3115, // expectedPointsExchange
                 // Calculation:
-                // 1. Home advantage applied: 92.77 + 3 = 95.77
-                // 2. Rating difference: 95.77 - 90.36 = 5.41
-                // 3. Rating difference capped at 10: 5.41 (unchanged)
-                // 4. Rating factor: 5.41 / 10 = 0.541
-                // 5. Home team loses, so P = -(1 + D/10) = -(1 + 0.541) = -1.541
+                // 1. Home advantage applied: 92.777351682669 + 3 = 95.777351682669
+                // 2. Rating difference: 95.777351682669 - 90.362919014871 = 5.414432667798
+                // 3. Rating difference capped at 10: 5.414432667798 (unchanged)
+                // 4. Rating factor: 5.414432667798 / 10 = 0.5414432667798
+                // 5. Home team loses, so P = -(1 + D/10) = -(1 + 0.5414432667798) = -1.5414432667798
                 // 6. Large victory (35-10 = 25 points difference > 15), so weight = 1.5
-                // 7. Final points exchange = -1.541 * 1.5 = -2.3115
+                // 7. Final points exchange = -1.5414432667798 * 1.5 = -2.3115
             ],
             'SA wins at home in World Cup' => [
                 27, // homeScore
@@ -178,13 +178,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 true, // isWorldCup
                 0.918, // expectedPointsExchange
                 // Calculation:
-                // 1. Home advantage applied: 92.77 + 3 = 95.77
-                // 2. Rating difference: 95.77 - 90.36 = 5.41
-                // 3. Rating difference capped at 10: 5.41 (unchanged)
-                // 4. Rating factor: 5.41 / 10 = 0.541
-                // 5. Home team wins, so P = 1 - D/10 = 1 - 0.541 = 0.459
+                // 1. Home advantage applied: 92.777351682669 + 3 = 95.777351682669
+                // 2. Rating difference: 95.777351682669 - 90.362919014871 = 5.414432667798
+                // 3. Rating difference capped at 10: 5.414432667798 (unchanged)
+                // 4. Rating factor: 5.414432667798 / 10 = 0.5414432667798
+                // 5. Home team wins, so P = 1 - D/10 = 1 - 0.5414432667798 = 0.4585567332202
                 // 6. No large victory (27-20 = 7 points difference < 15), but World Cup match, so weight = 2.0
-                // 7. Final points exchange = 0.459 * 2.0 = 0.918
+                // 7. Final points exchange = 0.4585567332202 * 2.0 = 0.918
             ],
             'SA loses at home in World Cup' => [
                 15, // homeScore
@@ -193,13 +193,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 true, // isWorldCup
                 -3.082, // expectedPointsExchange
                 // Calculation:
-                // 1. Home advantage applied: 92.77 + 3 = 95.77
-                // 2. Rating difference: 95.77 - 90.36 = 5.41
-                // 3. Rating difference capped at 10: 5.41 (unchanged)
-                // 4. Rating factor: 5.41 / 10 = 0.541
-                // 5. Home team loses, so P = -(1 + D/10) = -(1 + 0.541) = -1.541
+                // 1. Home advantage applied: 92.777351682669 + 3 = 95.777351682669
+                // 2. Rating difference: 95.777351682669 - 90.362919014871 = 5.414432667798
+                // 3. Rating difference capped at 10: 5.414432667798 (unchanged)
+                // 4. Rating factor: 5.414432667798 / 10 = 0.5414432667798
+                // 5. Home team loses, so P = -(1 + D/10) = -(1 + 0.5414432667798) = -1.5414432667798
                 // 6. No large victory (25-15 = 10 points difference < 15), but World Cup match, so weight = 2.0
-                // 7. Final points exchange = -1.541 * 2.0 = -3.082
+                // 7. Final points exchange = -1.5414432667798 * 2.0 = -3.082
             ],
             'SA wins big at home in World Cup' => [
                 35, // homeScore
@@ -208,13 +208,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 true, // isWorldCup
                 1.377, // expectedPointsExchange
                 // Calculation:
-                // 1. Home advantage applied: 92.77 + 3 = 95.77
-                // 2. Rating difference: 95.77 - 90.36 = 5.41
-                // 3. Rating difference capped at 10: 5.41 (unchanged)
-                // 4. Rating factor: 5.41 / 10 = 0.541
-                // 5. Home team wins, so P = 1 - D/10 = 1 - 0.541 = 0.459
+                // 1. Home advantage applied: 92.777351682669 + 3 = 95.777351682669
+                // 2. Rating difference: 95.777351682669 - 90.362919014871 = 5.414432667798
+                // 3. Rating difference capped at 10: 5.414432667798 (unchanged)
+                // 4. Rating factor: 5.414432667798 / 10 = 0.5414432667798
+                // 5. Home team wins, so P = 1 - D/10 = 1 - 0.5414432667798 = 0.4585567332202
                 // 6. Large victory (35-10 = 25 points difference > 15) and World Cup match, so weight = 1.5 * 2.0 = 3.0
-                // 7. Final points exchange = 0.459 * 3.0 = 1.377
+                // 7. Final points exchange = 0.4585567332202 * 3.0 = 1.377
             ],
             'SA loses big at home in World Cup' => [
                 10, // homeScore
@@ -223,13 +223,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 true, // isWorldCup
                 -4.623, // expectedPointsExchange
                 // Calculation:
-                // 1. Home advantage applied: 92.77 + 3 = 95.77
-                // 2. Rating difference: 95.77 - 90.36 = 5.41
-                // 3. Rating difference capped at 10: 5.41 (unchanged)
-                // 4. Rating factor: 5.41 / 10 = 0.541
-                // 5. Home team loses, so P = -(1 + D/10) = -(1 + 0.541) = -1.541
+                // 1. Home advantage applied: 92.777351682669 + 3 = 95.777351682669
+                // 2. Rating difference: 95.777351682669 - 90.362919014871 = 5.414432667798
+                // 3. Rating difference capped at 10: 5.414432667798 (unchanged)
+                // 4. Rating factor: 5.414432667798 / 10 = 0.5414432667798
+                // 5. Home team loses, so P = -(1 + D/10) = -(1 + 0.5414432667798) = -1.5414432667798
                 // 6. Large victory (35-10 = 25 points difference > 15) and World Cup match, so weight = 1.5 * 2.0 = 3.0
-                // 7. Final points exchange = -1.541 * 3.0 = -4.623
+                // 7. Final points exchange = -1.5414432667798 * 3.0 = -4.623
             ],
             'Draw at home in World Cup' => [
                 20, // homeScore
@@ -238,13 +238,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 true, // isWorldCup
                 -1.082, // expectedPointsExchange
                 // Calculation:
-                // 1. Home advantage applied: 92.77 + 3 = 95.77
-                // 2. Rating difference: 95.77 - 90.36 = 5.41
-                // 3. Rating difference capped at 10: 5.41 (unchanged)
-                // 4. Rating factor: 5.41 / 10 = 0.541
-                // 5. Draw, so P = -D/10 = -0.541
+                // 1. Home advantage applied: 92.777351682669 + 3 = 95.777351682669
+                // 2. Rating difference: 95.777351682669 - 90.362919014871 = 5.414432667798
+                // 3. Rating difference capped at 10: 5.414432667798 (unchanged)
+                // 4. Rating factor: 5.414432667798 / 10 = 0.5414432667798
+                // 5. Draw, so P = -D/10 = -0.5414432667798
                 // 6. World Cup match, so weight = 2.0
-                // 7. Final points exchange = -0.541 * 2.0 = -1.082
+                // 7. Final points exchange = -0.5414432667798 * 2.0 = -1.082
             ],
             'Draw at neutral ground in World Cup' => [
                 20, // homeScore
@@ -253,13 +253,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 true, // isWorldCup
                 -0.482, // expectedPointsExchange
                 // Calculation:
-                // 1. Neutral ground, so no home advantage: 92.77 (unchanged)
-                // 2. Rating difference: 92.77 - 90.36 = 2.41
-                // 3. Rating difference capped at 10: 2.41 (unchanged)
-                // 4. Rating factor: 2.41 / 10 = 0.241
-                // 5. Draw, so P = -D/10 = -0.241
+                // 1. Neutral ground, so no home advantage: 92.777351682669 (unchanged)
+                // 2. Rating difference: 92.777351682669 - 90.362919014871 = 2.414432667798
+                // 3. Rating difference capped at 10: 2.414432667798 (unchanged)
+                // 4. Rating factor: 2.414432667798 / 10 = 0.2414432667798
+                // 5. Draw, so P = -D/10 = -0.2414432667798
                 // 6. World Cup match, so weight = 2.0
-                // 7. Final points exchange = -0.241 * 2.0 = -0.482
+                // 7. Final points exchange = -0.2414432667798 * 2.0 = -0.482
             ],
             'SA wins at neutral ground in World Cup' => [
                 27, // homeScore
@@ -268,13 +268,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 true, // isWorldCup
                 1.518, // expectedPointsExchange
                 // Calculation:
-                // 1. Neutral ground, so no home advantage: 92.77 (unchanged)
-                // 2. Rating difference: 92.77 - 90.36 = 2.41
-                // 3. Rating difference capped at 10: 2.41 (unchanged)
-                // 4. Rating factor: 2.41 / 10 = 0.241
-                // 5. Home team wins, so P = 1 - D/10 = 1 - 0.241 = 0.759
+                // 1. Neutral ground, so no home advantage: 92.777351682669 (unchanged)
+                // 2. Rating difference: 92.777351682669 - 90.362919014871 = 2.414432667798
+                // 3. Rating difference capped at 10: 2.414432667798 (unchanged)
+                // 4. Rating factor: 2.414432667798 / 10 = 0.2414432667798
+                // 5. Home team wins, so P = 1 - D/10 = 1 - 0.2414432667798 = 0.7585567332202
                 // 6. No large victory (27-20 = 7 points difference < 15), but World Cup match, so weight = 2.0
-                // 7. Final points exchange = 0.759 * 2.0 = 1.518
+                // 7. Final points exchange = 0.7585567332202 * 2.0 = 1.518
             ],
             'SA loses at neutral ground in World Cup' => [
                 15, // homeScore
@@ -283,13 +283,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 true, // isWorldCup
                 -2.482, // expectedPointsExchange
                 // Calculation:
-                // 1. Neutral ground, so no home advantage: 92.77 (unchanged)
-                // 2. Rating difference: 92.77 - 90.36 = 2.41
-                // 3. Rating difference capped at 10: 2.41 (unchanged)
-                // 4. Rating factor: 2.41 / 10 = 0.241
-                // 5. Home team loses, so P = -(1 + D/10) = -(1 + 0.241) = -1.241
+                // 1. Neutral ground, so no home advantage: 92.777351682669 (unchanged)
+                // 2. Rating difference: 92.777351682669 - 90.362919014871 = 2.414432667798
+                // 3. Rating difference capped at 10: 2.414432667798 (unchanged)
+                // 4. Rating factor: 2.414432667798 / 10 = 0.2414432667798
+                // 5. Home team loses, so P = -(1 + D/10) = -(1 + 0.2414432667798) = -1.2414432667798
                 // 6. No large victory (25-15 = 10 points difference < 15), but World Cup match, so weight = 2.0
-                // 7. Final points exchange = -1.241 * 2.0 = -2.482
+                // 7. Final points exchange = -1.2414432667798 * 2.0 = -2.482
             ],
             'SA wins big at neutral ground in World Cup' => [
                 35, // homeScore
@@ -298,13 +298,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 true, // isWorldCup
                 2.277, // expectedPointsExchange
                 // Calculation:
-                // 1. Neutral ground, so no home advantage: 92.77 (unchanged)
-                // 2. Rating difference: 92.77 - 90.36 = 2.41
-                // 3. Rating difference capped at 10: 2.41 (unchanged)
-                // 4. Rating factor: 2.41 / 10 = 0.241
-                // 5. Home team wins, so P = 1 - D/10 = 1 - 0.241 = 0.759
+                // 1. Neutral ground, so no home advantage: 92.777351682669 (unchanged)
+                // 2. Rating difference: 92.777351682669 - 90.362919014871 = 2.414432667798
+                // 3. Rating difference capped at 10: 2.414432667798 (unchanged)
+                // 4. Rating factor: 2.414432667798 / 10 = 0.2414432667798
+                // 5. Home team wins, so P = 1 - D/10 = 1 - 0.2414432667798 = 0.7585567332202
                 // 6. Large victory (35-10 = 25 points difference > 15) and World Cup match, so weight = 1.5 * 2.0 = 3.0
-                // 7. Final points exchange = 0.759 * 3.0 = 2.277
+                // 7. Final points exchange = 0.7585567332202 * 3.0 = 2.277
             ],
             'SA loses big at neutral ground in World Cup' => [
                 10, // homeScore
@@ -313,13 +313,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 true, // isWorldCup
                 -3.723, // expectedPointsExchange
                 // Calculation:
-                // 1. Neutral ground, so no home advantage: 92.77 (unchanged)
-                // 2. Rating difference: 92.77 - 90.36 = 2.41
-                // 3. Rating difference capped at 10: 2.41 (unchanged)
-                // 4. Rating factor: 2.41 / 10 = 0.241
-                // 5. Home team loses, so P = -(1 + D/10) = -(1 + 0.241) = -1.241
+                // 1. Neutral ground, so no home advantage: 92.777351682669 (unchanged)
+                // 2. Rating difference: 92.777351682669 - 90.362919014871 = 2.414432667798
+                // 3. Rating difference capped at 10: 2.414432667798 (unchanged)
+                // 4. Rating factor: 2.414432667798 / 10 = 0.2414432667798
+                // 5. Home team loses, so P = -(1 + D/10) = -(1 + 0.2414432667798) = -1.2414432667798
                 // 6. Large victory (35-10 = 25 points difference > 15) and World Cup match, so weight = 1.5 * 2.0 = 3.0
-                // 7. Final points exchange = -1.241 * 3.0 = -3.723
+                // 7. Final points exchange = -1.2414432667798 * 3.0 = -3.723
             ],
             'SA wins big at neutral ground' => [
                 35, // homeScore
@@ -328,13 +328,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 false, // isWorldCup
                 1.1385, // expectedPointsExchange
                 // Calculation:
-                // 1. Neutral ground, so no home advantage: 92.77 (unchanged)
-                // 2. Rating difference: 92.77 - 90.36 = 2.41
-                // 3. Rating difference capped at 10: 2.41 (unchanged)
-                // 4. Rating factor: 2.41 / 10 = 0.241
-                // 5. Home team wins, so P = 1 - D/10 = 1 - 0.241 = 0.759
+                // 1. Neutral ground, so no home advantage: 92.777351682669 (unchanged)
+                // 2. Rating difference: 92.777351682669 - 90.362919014871 = 2.414432667798
+                // 3. Rating difference capped at 10: 2.414432667798 (unchanged)
+                // 4. Rating factor: 2.414432667798 / 10 = 0.2414432667798
+                // 5. Home team wins, so P = 1 - D/10 = 1 - 0.2414432667798 = 0.7585567332202
                 // 6. Large victory (35-10 = 25 points difference > 15), so weight = 1.5
-                // 7. Final points exchange = 0.759 * 1.5 = 1.1385
+                // 7. Final points exchange = 0.7585567332202 * 1.5 = 1.1385
             ],
             'SA loses big at neutral ground' => [
                 10, // homeScore
@@ -343,13 +343,13 @@ class PointsExchangeCalculatorCloseRankingsTest extends TestCase
                 false, // isWorldCup
                 -1.8615, // expectedPointsExchange
                 // Calculation:
-                // 1. Neutral ground, so no home advantage: 92.77 (unchanged)
-                // 2. Rating difference: 92.77 - 90.36 = 2.41
-                // 3. Rating difference capped at 10: 2.41 (unchanged)
-                // 4. Rating factor: 2.41 / 10 = 0.241
-                // 5. Home team loses, so P = -(1 + D/10) = -(1 + 0.241) = -1.241
+                // 1. Neutral ground, so no home advantage: 92.777351682669 (unchanged)
+                // 2. Rating difference: 92.777351682669 - 90.362919014871 = 2.414432667798
+                // 3. Rating difference capped at 10: 2.414432667798 (unchanged)
+                // 4. Rating factor: 2.414432667798 / 10 = 0.2414432667798
+                // 5. Home team loses, so P = -(1 + D/10) = -(1 + 0.2414432667798) = -1.2414432667798
                 // 6. Large victory (35-10 = 25 points difference > 15), so weight = 1.5
-                // 7. Final points exchange = -1.241 * 1.5 = -1.8615
+                // 7. Final points exchange = -1.2414432667798 * 1.5 = -1.8615
             ]
         ];
     }
