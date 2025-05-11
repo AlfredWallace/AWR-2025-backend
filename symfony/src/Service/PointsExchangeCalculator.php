@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Exception\InvalidCalculatorDataException;
+
 /**
  * Implementation of the World Rugby ranking points exchange system.
  * Based on the official World Rugby ranking calculation rules.
@@ -51,6 +53,7 @@ readonly class PointsExchangeCalculator
      * @param bool $isWorldCup           Whether the match is part of the World Cup
      * 
      * @return float Points to be exchanged between teams (positive means home team gains points)
+     * @throws InvalidCalculatorDataException If any of the scores or rankings are negative
      */
     public function calculateExchangedPoints(
         float $homeTeamRanking,
@@ -60,6 +63,21 @@ readonly class PointsExchangeCalculator
         bool $isNeutralGround,
         bool $isWorldCup
     ): float {
+        // Validate inputs - scores and rankings cannot be negative
+        if ($homeTeamRanking < 0 || $awayTeamRanking < 0 || $homeScore < 0 || $awayScore < 0) {
+            throw new InvalidCalculatorDataException(
+                "Invalid data: scores and rankings must be non-negative",
+                0,
+                null,
+                [
+                    'homeTeamRanking' => $homeTeamRanking,
+                    'awayTeamRanking' => $awayTeamRanking,
+                    'homeScore' => $homeScore,
+                    'awayScore' => $awayScore
+                ]
+            );
+        }
+        
         // Step 1: Apply home advantage to home team's rating (only if not on neutral ground)
         $homeTeamEffectiveRating = $isNeutralGround 
             ? $homeTeamRanking
