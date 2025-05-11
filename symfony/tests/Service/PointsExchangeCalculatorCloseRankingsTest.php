@@ -5,7 +5,7 @@ namespace App\Tests\Service;
 use App\Service\PointsExchangeCalculator;
 use PHPUnit\Framework\TestCase;
 
-class PointsExchangeCalculatorTest extends TestCase
+class PointsExchangeCalculatorCloseRankingsTest extends TestCase
 {
     private PointsExchangeCalculator $calculator;
 
@@ -17,7 +17,7 @@ class PointsExchangeCalculatorTest extends TestCase
     /**
      * @dataProvider matchScenarioProvider
      */
-    public function testMatchBetweenSouthAfricaAndNewZealand(
+    public function test_between_teams_with_close_rankings(
         int $homeScore,
         int $awayScore,
         bool $isNeutralGround,
