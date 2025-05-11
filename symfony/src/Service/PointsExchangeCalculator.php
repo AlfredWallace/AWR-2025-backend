@@ -2,17 +2,46 @@
 
 namespace App\Service;
 
+/**
+ * Implementation of the World Rugby ranking points exchange system.
+ * Based on the official World Rugby ranking calculation rules.
+ * @see https://www.world.rugby/rankings/explanation
+ */
 readonly class PointsExchangeCalculator
 {
+    /**
+     * Maximum difference in ratings to be considered for points exchange calculation.
+     * The World Rugby system caps the rating difference at 10 points.
+     */
     private const float RATING_CAP = 10.0;
+    
+    /**
+     * Points advantage given to the home team.
+     * According to World Rugby rules, home teams receive a 3-point advantage.
+     */
     private const float HOME_ADVANTAGE = 3.0;
+    
+    /**
+     * Multiplier for World Cup matches.
+     * World Cup matches have double the impact on rankings.
+     */
     private const float WEIGHT_WORLD_CUP = 2.0;
+    
+    /**
+     * Multiplier for matches with large victory margins.
+     * Victories by more than 15 points are considered significant.
+     */
     private const float WEIGHT_LARGE_VICTORY = 1.5;
+    
+    /**
+     * Point difference threshold for considering a victory as "large".
+     * World Rugby considers a victory margin greater than 15 points as significant.
+     */
     private const int LARGE_VICTORY_THRESHOLD = 15;
     
     /**
-     * Pure algorithmic function to calculate points exchange based on numeric parameters.
-     * Returns a single value representing the points to be exchanged between teams.
+     * Calculates the points to be exchanged between teams after a match.
+     * Follows the official World Rugby "Points Exchange" system.
      * 
      * @param float $homeTeamRanking     Home team's current ranking points
      * @param float $awayTeamRanking     Away team's current ranking points
@@ -21,7 +50,7 @@ readonly class PointsExchangeCalculator
      * @param bool $isNeutralGround      Whether the match is played on neutral ground
      * @param bool $isWorldCup           Whether the match is part of the World Cup
      * 
-     * @return float Points to be exchanged between teams
+     * @return float Points to be exchanged between teams (positive means home team gains points)
      */
     public function calculateExchangedPoints(
         float $homeTeamRanking,
@@ -42,21 +71,24 @@ readonly class PointsExchangeCalculator
         // Step 3: Apply rating cap (max 10 points difference considered)
         $cappedRatingDifference = max(-self::RATING_CAP, min(self::RATING_CAP, $ratingDifference));
         
-        // Step 4: Calculate expected outcome for home team
-        // Formula: 1 / (1 + 10^(-ratingDiff/10))
-        $homeExpectedWin = 1 / (1 + pow(10, -$cappedRatingDifference / 10));
+        // Step 4: Calculate points exchange based on World Rugby's direct formulas:
+        // P = 1 - D/10 if the team wins
+        // P = -(1 + D/10) if the team loses
+        // P = -D/10 if there's a draw
+        // Where D is the rating difference between teams
         
-        // Step 5: Determine actual match outcome (1 for win, 0.5 for draw, 0 for loss)
+        $ratingFactor = $cappedRatingDifference / 10;
+        
         if ($homeScore > $awayScore) {
-            $homeActualOutcome = 1;
+            // Home team wins: P = 1 - D/10
+            $basePointsExchange = 1 - $ratingFactor;
         } elseif ($homeScore < $awayScore) {
-            $homeActualOutcome = 0;
+            // Home team loses: P = -(1 + D/10)
+            $basePointsExchange = -(1 + $ratingFactor);
         } else {
-            $homeActualOutcome = 0.5;
+            // Draw: P = -D/10
+            $basePointsExchange = -$ratingFactor;
         }
-        
-        // Step 6: Calculate base points exchange
-        $basePointsExchange = abs($homeActualOutcome - $homeExpectedWin);
         
         // Step 7: Calculate weight based on match circumstances
         $weight = 1.0;

@@ -48,7 +48,11 @@ readonly class RugbyMatchPointsCalculator
         $awayTeamRanking = $awayTeamSimulationLastPoints ? $awayTeamSimulationLastPoints->points : $awayTeam->points;
         
         // Get the points to be exchanged from the algorithm
-        $pointsToExchange = $this->pointsExchangeCalculator->calculateExchangedPoints(
+        // With the direct formula implementation, the sign of the result already indicates
+        // which team gains or loses points:
+        // - Positive value: Home team gains points, away team loses points
+        // - Negative value: Home team loses points, away team gains points
+        $pointsExchange = $this->pointsExchangeCalculator->calculateExchangedPoints(
             $homeTeamRanking,
             $awayTeamRanking,
             $match->homeScore,
@@ -57,33 +61,10 @@ readonly class RugbyMatchPointsCalculator
             $match->isWorldCup
         );
         
-        // Determine who gets the points based on the match result using match expression
-        [$homePointsChange, $awayPointsChange] = match (true) {
-            // Home team won
-            $match->homeScore > $match->awayScore => [
-                $pointsToExchange, 
-                -$pointsToExchange
-            ],
-            
-            // Away team won
-            $match->homeScore < $match->awayScore => [
-                -$pointsToExchange, 
-                $pointsToExchange
-            ],
-            
-            // Draw - points are still exchanged based on the pre-match rankings
-            $homeTeamRanking > $awayTeamRanking => [
-                -$pointsToExchange,  // Home team was higher-ranked, they lose points
-                $pointsToExchange
-            ],
-            $homeTeamRanking < $awayTeamRanking => [
-                $pointsToExchange,   // Away team was higher-ranked, they lose points
-                -$pointsToExchange
-            ],
-            
-            // Teams were equally ranked, no points exchanged
-            default => [0.0, 0.0]
-        };
+        // Since the sign already indicates which team gains or loses points,
+        // we just need to assign the values with opposite signs
+        $homePointsChange = $pointsExchange;
+        $awayPointsChange = -$pointsExchange;
         
         return [
             'homePoints' => $homePointsChange,
