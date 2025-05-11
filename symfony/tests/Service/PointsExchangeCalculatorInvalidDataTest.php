@@ -18,7 +18,7 @@ class PointsExchangeCalculatorInvalidDataTest extends TestCase
     /**
      * @dataProvider invalidDataProvider
      */
-    public function testThrowsExceptionOnInvalidData(
+    public function test_negative_values(
         float $homeTeamRanking,
         float $awayTeamRanking,
         int $homeScore,
