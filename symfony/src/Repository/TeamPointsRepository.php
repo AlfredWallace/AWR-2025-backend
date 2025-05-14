@@ -28,20 +28,20 @@ class TeamPointsRepository extends ServiceEntityRepository
     {
         return parent::getEntityManager();
     }
-    
+
     /**
-     * Find the most recent TeamPoints entry for a team in a simulation before a specific order
+     * Find the most recent TeamPoints entry for a team in a simulation before a specific step number
      */
-    public function findMostRecentTeamPointsBeforeOrder(Simulation $simulation, Team $team, int $order): ?TeamPoints
+    public function findMostRecentTeamPointsBeforeStepNumber(Simulation $simulation, Team $team, int $stepNumber): ?TeamPoints
     {
         return $this->createQueryBuilder('tp')
             ->where('tp.simulation = :simulation')
             ->andWhere('tp.team = :team')
-            ->andWhere('tp.order < :order')
+            ->andWhere('tp.stepNumber < :stepNumber')
             ->setParameter('simulation', $simulation)
             ->setParameter('team', $team)
-            ->setParameter('order', $order)
-            ->orderBy('tp.order', 'DESC')
+            ->setParameter('stepNumber', $stepNumber)
+            ->orderBy('tp.stepNumber', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();

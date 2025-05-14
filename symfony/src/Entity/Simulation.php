@@ -16,11 +16,11 @@ class Simulation
     private(set) int $id;
 
     #[ORM\OneToMany(targetEntity: RugbyMatch::class, mappedBy: "simulation", cascade: ["persist", "remove"])]
-    #[ORM\OrderBy(["order" => "ASC"])]
-    readonly Collection $matches;
+    #[ORM\OrderBy(["stepNumber" => "ASC"])]
+    private(set) Collection $matches;
 
     #[ORM\OneToMany(targetEntity: TeamPoints::class, mappedBy: "simulation", cascade: ["persist", "remove"])]
-    readonly Collection $teamPoints;
+    private(set) Collection $teamPoints;
 
     public function __construct(
         #[ORM\Column]
@@ -29,24 +29,24 @@ class Simulation
         $this->matches = new ArrayCollection();
         $this->teamPoints = new ArrayCollection();
     }
-    
+
     public function addMatch(RugbyMatch $match): self
     {
         if (!$this->matches->contains($match)) {
             $this->matches->add($match);
             $match->setSimulation($this);
         }
-        
+
         return $this;
     }
-    
+
     public function addTeamPoint(TeamPoints $teamPoint): self
     {
         if (!$this->teamPoints->contains($teamPoint)) {
             $this->teamPoints->add($teamPoint);
             $teamPoint->setSimulation($this);
         }
-        
+
         return $this;
     }
 }

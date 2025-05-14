@@ -9,10 +9,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: RugbyMatchRepository::class)]
 #[ORM\Table(name: "rugby_match")]
 #[ORM\UniqueConstraint(
-    name: "unique_simulation_order", 
-    columns: ["simulation_id", "order"]
+    name: "unique_simulation_stepNumber", 
+    columns: ["simulation_id", "step_number"]
 )]
-#[ORM\Index(name: "idx_simulation_order", columns: ["simulation_id", "order"])]
+#[ORM\Index(name: "idx_simulation_stepNumber", columns: ["simulation_id", "step_number"])]
 class RugbyMatch
 {
     #[ORM\Id]
@@ -21,38 +21,38 @@ class RugbyMatch
     private(set) int $id;
 
     public function __construct(
-        
+
         #[ORM\ManyToOne(targetEntity: Team::class)]
         #[ORM\JoinColumn(nullable: false)]
         readonly Team $homeTeam,
-        
+
         #[ORM\ManyToOne(targetEntity: Team::class)]
         #[ORM\JoinColumn(nullable: false)]
         readonly Team $awayTeam,
-        
+
         #[ORM\Column]
         #[Assert\GreaterThanOrEqual(0)]
         readonly int $homeScore,
-        
+
         #[ORM\Column]
         #[Assert\GreaterThanOrEqual(0)]
         readonly int $awayScore,
-        
+
         #[ORM\Column]
         readonly bool $isNeutralGround = false,
-        
+
         #[ORM\Column]
         readonly bool $isWorldCup = false,
-        
-        #[ORM\Column]
-        readonly int $order,
-        
+
+        #[ORM\Column(name: "step_number")]
+        readonly int $stepNumber,
+
         #[ORM\ManyToOne(targetEntity: Simulation::class, inversedBy: "matches")]
         #[ORM\JoinColumn(nullable: false)]
         private(set) Simulation $simulation
     ) {
     }
-    
+
     public function setSimulation(Simulation $simulation): self
     {
         $this->simulation = $simulation;
