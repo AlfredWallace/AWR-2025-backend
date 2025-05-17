@@ -15,20 +15,32 @@ readonly class SimulationRunner
     ) {
     }
 
-    public function run(Simulation $simulation): void
+    public function runNewSimulation(Simulation $simulation): void
     {
+        $this->checkIfItHasMatches($simulation);
+
         // Check if the simulation has rugby matches
-        if ($simulation->matches->isEmpty()) {
-            throw new InvalidSimulationException('Simulation has no rugby matches');
+        if (!$simulation->teamPoints->isEmpty()) {
+            throw new InvalidSimulationException('Simulation already has team points.');
         }
+
+        $this->run($simulation);
+    }
+
+    public function reRunSimulation(Simulation $simulation): void
+    {
+        $this->checkIfItHasMatches($simulation);
 
         // Remove existing team points
         foreach ($simulation->teamPoints as $teamPoint) {
             $this->entityManager->remove($teamPoint);
         }
 
-        $this->entityManager->flush();
+        $this->run($simulation);
+    }
 
+    private function run(Simulation $simulation): void
+    {
         // Initialize team points tracking
         $teamPoints = [];
 
@@ -84,5 +96,13 @@ readonly class SimulationRunner
         }
 
         $this->entityManager->flush();
+    }
+
+    private function checkIfItHasMatches(Simulation $simulation): void
+    {
+        // Check if the simulation has rugby matches
+        if ($simulation->matches->isEmpty()) {
+            throw new InvalidSimulationException('Simulation has no rugby matches');
+        }
     }
 }
