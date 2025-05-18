@@ -28,7 +28,7 @@ class TeamStructureValidationTest extends TestCase
     /**
      * @dataProvider teamsDataProvider
      */
-    public function testPersistTeamsStructureValidation(array $teamsData, string $expectedExceptionMessage): void
+    public function test_persist_teams_structure_validation(array $teamsData, string $expectedExceptionMessage): void
     {
         $this->expectException(TeamValidationException::class);
         $this->expectExceptionMessage($expectedExceptionMessage);
