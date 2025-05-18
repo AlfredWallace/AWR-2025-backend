@@ -23,8 +23,8 @@ class SimulationController extends AbstractController
     ) {
     }
 
-    #[Route('/simulations/run', name: 'simulation_run', methods: ['POST'])]
-    public function createSimulation(Request $request): JsonResponse
+    #[Route('/simulations/run', name: 'run_simulation', methods: ['POST'])]
+    public function runSimulation(Request $request): JsonResponse
     {
         try {
             $data = json_decode($request->getContent(), true);
