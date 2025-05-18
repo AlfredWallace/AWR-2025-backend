@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Service;
+namespace App\Tests;
 
 use App\Service\PointsExchangeCalculator;
 use PHPUnit\Framework\TestCase;
@@ -34,7 +34,7 @@ class PointsExchangeCalculatorEdgeCasesTest extends TestCase
             $isNeutralGround,
             $isWorldCup
         );
-        
+
         // Use a single assertion with a small delta for floating-point precision
         $this->assertEqualsWithDelta(
             $expectedPoints,

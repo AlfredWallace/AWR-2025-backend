@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Service;
+namespace App\Tests;
 
 use App\Service\PointsExchangeCalculator;
 use PHPUnit\Framework\TestCase;
@@ -33,7 +33,7 @@ class PointsExchangeCalculatorDistantRankingsTest extends TestCase
             $isNeutralGround,
             $isWorldCup
         );
-        
+
         // Use a single assertion with a small delta for floating-point precision
         $this->assertEqualsWithDelta(
             $expectedPointsExchange,
@@ -42,7 +42,7 @@ class PointsExchangeCalculatorDistantRankingsTest extends TestCase
             'Points exchanged should match the calculated value' // Delta value for floating-point comparison
         );
     }
-    
+
     /**
      * Data provider for match scenarios between Ireland and Italy
      * 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Service;
+namespace App\Tests;
 
 use App\Exception\TeamValidationException;
 use App\Repository\TeamRepository;
@@ -128,4 +128,3 @@ class TeamStructureValidationTest extends TestCase
         ];
     }
 }
-

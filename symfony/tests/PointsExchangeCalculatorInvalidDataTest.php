@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Service;
+namespace App\Tests;
 
 use App\Exception\InvalidCalculatorDataException;
 use App\Service\PointsExchangeCalculator;
