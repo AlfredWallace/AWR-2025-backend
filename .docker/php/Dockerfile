@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
     opcache
 
 # Install Composer with a specific version
-COPY --from=composer:2.7.1 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.8.9 /usr/bin/composer /usr/bin/composer
 
 # Install Symfony CLI
 RUN wget https://get.symfony.com/cli/installer -O - | bash && \
