@@ -15,11 +15,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null {
-        get {
-            return $this->id;
-        }
-    }
+    private ?int $id = null;
 
     #[ORM\Column(length: 180)]
     private ?string $email = null;
@@ -35,6 +31,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getEmail(): ?string
     {
