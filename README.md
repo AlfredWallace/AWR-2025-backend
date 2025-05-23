@@ -16,7 +16,7 @@ This project uses the following technologies:
 
 This project uses a simplified Docker setup for local development:
 
-- **Web Server**: Nginx running on port 8081
+- **Web Server**: Nginx running on port 8888
 - **PHP**: PHP-FPM 8.4 with essential extensions for Symfony
 - **Database**: PostgreSQL 15 running on port 5432
 
