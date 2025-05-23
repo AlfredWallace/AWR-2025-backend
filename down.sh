@@ -1,2 +1,3 @@
 #!/bin/bash
-docker-compose down
+# Stop the Docker containers
+docker compose down

@@ -1,2 +1,3 @@
 #!/bin/bash
-docker-compose exec php vendor/bin/phpunit
+# Run PHPUnit tests
+docker compose exec php vendor/bin/phpunit
