@@ -15,6 +15,13 @@ class Simulation
     #[ORM\Column]
     private(set) int $id;
 
+    #[ORM\Column]
+    private string $name;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "simulations")]
+    #[ORM\JoinColumn(nullable: false)]
+    private User $user;
+
     #[ORM\OneToMany(targetEntity: RugbyMatch::class, mappedBy: "simulation", cascade: ["persist", "remove"])]
     #[ORM\OrderBy(["stepNumber" => "ASC"])]
     private(set) Collection $matches;
@@ -22,18 +29,24 @@ class Simulation
     #[ORM\OneToMany(targetEntity: TeamPoints::class, mappedBy: "simulation", cascade: ["persist", "remove"])]
     private(set) Collection $teamPoints;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "simulations")]
-    #[ORM\JoinColumn(nullable: false)]
-    private User $user;
-
-    public function __construct(
-        #[ORM\Column]
-        readonly string $name,
-        User $user
-    ) {
+    public function __construct(string $name, User $user)
+    {
+        $this->name = $name;
+        $this->user = $user;
         $this->matches = new ArrayCollection();
         $this->teamPoints = new ArrayCollection();
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
         $this->user = $user;
+
+        return $this;
     }
 
     public function addMatch(RugbyMatch $match): self
@@ -56,14 +69,14 @@ class Simulation
         return $this;
     }
 
-    public function getUser(): User
+    public function getName(): string
     {
-        return $this->user;
+        return $this->name;
     }
 
-    public function setUser(User $user): self
+    public function setName(string $name): self
     {
-        $this->user = $user;
+        $this->name = $name;
 
         return $this;
     }
