@@ -22,12 +22,18 @@ class Simulation
     #[ORM\OneToMany(targetEntity: TeamPoints::class, mappedBy: "simulation", cascade: ["persist", "remove"])]
     private(set) Collection $teamPoints;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "simulations")]
+    #[ORM\JoinColumn(nullable: false)]
+    private User $user;
+
     public function __construct(
         #[ORM\Column]
-        readonly string $name
+        readonly string $name,
+        User $user
     ) {
         $this->matches = new ArrayCollection();
         $this->teamPoints = new ArrayCollection();
+        $this->user = $user;
     }
 
     public function addMatch(RugbyMatch $match): self
@@ -46,6 +52,18 @@ class Simulation
             $this->teamPoints->add($teamPoint);
             $teamPoint->setSimulation($this);
         }
+
+        return $this;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

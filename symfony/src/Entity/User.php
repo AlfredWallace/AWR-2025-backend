@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -31,6 +33,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\OneToMany(targetEntity: Simulation::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $simulations;
+
+    public function __construct()
+    {
+        $this->simulations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,5 +115,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Simulation>
+     */
+    public function getSimulations(): Collection
+    {
+        return $this->simulations;
+    }
+
+    public function addSimulation(Simulation $simulation): self
+    {
+        if (!$this->simulations->contains($simulation)) {
+            $this->simulations->add($simulation);
+            $simulation->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSimulation(Simulation $simulation): self
+    {
+        if ($this->simulations->removeElement($simulation)) {
+            // set the owning side to null (unless already changed)
+            if ($simulation->getUser() === $this) {
+                $simulation->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
