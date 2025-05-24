@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\Unit;
 
 use App\Exception\TeamValidationException;
 use App\Repository\TeamRepository;
