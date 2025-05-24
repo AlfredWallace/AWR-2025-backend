@@ -8,8 +8,6 @@ services:
       - ./symfony:/var/www/symfony
     depends_on:
       - postgre
-    environment:
-      DATABASE_URL: "postgresql://postgre_user:postgre_pass@postgre:5432/postgre_dev?serverVersion=15&charset=utf8"
 
   # Nginx service
   nginx:
