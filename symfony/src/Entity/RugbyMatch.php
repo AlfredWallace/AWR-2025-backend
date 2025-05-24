@@ -38,18 +38,18 @@ class RugbyMatch
         #[Assert\GreaterThanOrEqual(0)]
         readonly int $awayScore,
 
-        #[ORM\Column]
-        readonly bool $isNeutralGround = false,
-
-        #[ORM\Column]
-        readonly bool $isWorldCup = false,
-
         #[ORM\Column(name: "step_number")]
         readonly int $stepNumber,
 
         #[ORM\ManyToOne(targetEntity: Simulation::class, inversedBy: "matches")]
         #[ORM\JoinColumn(nullable: false)]
-        private(set) Simulation $simulation
+        private(set) Simulation $simulation,
+
+        #[ORM\Column]
+        readonly bool $isNeutralGround = false,
+
+        #[ORM\Column]
+        readonly bool $isWorldCup = false
     ) {
     }
 
