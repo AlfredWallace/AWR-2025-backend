@@ -24,7 +24,6 @@ class RegisterControllerTest extends WebTestCase
             ])
         );
 
-        var_dump($client->getResponse()->getContent());;
         // Assert first registration was successful
         $this->assertEquals(Response::HTTP_CREATED, $client->getResponse()->getStatusCode());
 
