@@ -9,7 +9,7 @@ services:
     depends_on:
       - database
     environment:
-      DATABASE_URL: "postgresql://app:app@database:5432/app?serverVersion=15&charset=utf8"
+      DATABASE_URL: "postgresql://db_user:db_pass@database:5432/db_name?serverVersion=15&charset=utf8"
 
   # Nginx service
   web:
@@ -30,11 +30,11 @@ services:
     volumes:
       - database_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_PASSWORD: app
-      POSTGRES_USER: app
-      POSTGRES_DB: app
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: db_pass
+      POSTGRES_DB: db_name
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U app"]
+      test: ["CMD-SHELL", "pg_isready -U db_user"]
       interval: 10s
       timeout: 5s
       retries: 5
