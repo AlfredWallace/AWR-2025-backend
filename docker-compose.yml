@@ -7,12 +7,12 @@ services:
     volumes:
       - ./symfony:/var/www/symfony
     depends_on:
-      - database
+      - postgre
     environment:
-      DATABASE_URL: "postgresql://db_user:db_pass@database:5432/db_name?serverVersion=15&charset=utf8"
+      DATABASE_URL: "postgresql://postgre_user:postgre_pass@postgre:5432/postgre_dev?serverVersion=15&charset=utf8"
 
   # Nginx service
-  web:
+  nginx:
     image: nginx:alpine
     ports:
       - "8888:80"
@@ -23,21 +23,21 @@ services:
       - php
 
   # PostgreSQL service
-  database:
+  postgre:
     image: postgres:15-alpine
     ports:
       - "5432:5432"
     volumes:
-      - database_data:/var/lib/postgresql/data
+      - postgre_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: db_user
-      POSTGRES_PASSWORD: db_pass
-      POSTGRES_DB: db_name
+      POSTGRES_USER: postgre_user
+      POSTGRES_PASSWORD: postgre_pass
+      POSTGRES_DB: postgre_dev
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U db_user"]
+      test: ["CMD-SHELL", "pg_isready -U postgre_user"]
       interval: 10s
       timeout: 5s
       retries: 5
 
 volumes:
-  database_data:
+  postgre_data:
