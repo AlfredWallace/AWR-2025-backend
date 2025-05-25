@@ -23,7 +23,6 @@ class MatchFactoryTest extends TestCase
 
         $this->matchFactory = new MatchFactory(
             $this->teamRepositoryMock,
-            $this->createMock(SerializerInterface::class),
             $this->createMock(ValidatorInterface::class)
         );
     }
