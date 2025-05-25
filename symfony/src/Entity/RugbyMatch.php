@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: RugbyMatchRepository::class)]
 #[ORM\Table(name: "rugby_match")]
 #[ORM\UniqueConstraint(
-    name: "unique_simulation_stepNumber", 
+    name: "unique_simulation_stepNumber",
     columns: ["simulation_id", "step_number"]
 )]
 #[ORM\Index(name: "idx_simulation_stepNumber", columns: ["simulation_id", "step_number"])]

@@ -6,6 +6,7 @@ use App\Repository\SimulationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute as Serializer;
 
 #[ORM\Entity(repositoryClass: SimulationRepository::class)]
 class Simulation
@@ -24,9 +25,11 @@ class Simulation
 
     #[ORM\OneToMany(targetEntity: RugbyMatch::class, mappedBy: "simulation", cascade: ["persist", "remove"])]
     #[ORM\OrderBy(["stepNumber" => "ASC"])]
+    #[Serializer\Ignore]
     private(set) Collection $matches;
 
     #[ORM\OneToMany(targetEntity: TeamPoints::class, mappedBy: "simulation", cascade: ["persist", "remove"])]
+    #[Serializer\Ignore]
     private(set) Collection $teamPoints;
 
     public function __construct()

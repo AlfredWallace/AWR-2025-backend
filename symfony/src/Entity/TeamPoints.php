@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TeamPointsRepository::class)]
 #[ORM\UniqueConstraint(
-    name: "unique_team_simulation_stepNumber", 
+    name: "unique_team_simulation_stepNumber",
     columns: ["team_id", "simulation_id", "step_number"]
 )]
 #[ORM\Index(name: "idx_simulation_stepNumber", columns: ["simulation_id", "step_number"])]
