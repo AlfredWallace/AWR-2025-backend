@@ -35,10 +35,15 @@ class Simulation
         $this->teamPoints = new ArrayCollection();
     }
 
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+        return $this;
+    }
+
     public function setUser(User $user): self
     {
         $this->user = $user;
-
         return $this;
     }
 
@@ -58,14 +63,6 @@ class Simulation
             $this->teamPoints->add($teamPoint);
             $teamPoint->setSimulation($this);
         }
-
-        return $this;
-    }
-
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
 
         return $this;
     }
