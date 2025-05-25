@@ -72,19 +72,17 @@ readonly class SimulationRunner
             $teamPoints[$awayTeam->id] = $newAwayTeamPoints;
 
             // Create TeamPoints entities for both teams
-            $homeTeamPoint = new TeamPoints(
-                $homeTeam,
-                $simulation,
-                $match->stepNumber,
-                $newHomeTeamPoints
-            );
+            $homeTeamPoint = new TeamPoints();
+            $homeTeamPoint->setTeam($homeTeam)
+                ->setSimulation($simulation)
+                ->setStepNumber($match->stepNumber)
+                ->setPoints($newHomeTeamPoints);
 
-            $awayTeamPoint = new TeamPoints(
-                $awayTeam,
-                $simulation,
-                $match->stepNumber,
-                $newAwayTeamPoints
-            );
+            $awayTeamPoint = new TeamPoints();
+            $awayTeamPoint->setTeam($awayTeam)
+                ->setSimulation($simulation)
+                ->setStepNumber($match->stepNumber)
+                ->setPoints($newAwayTeamPoints);
 
             // Add team points to simulation
             $simulation->addTeamPoint($homeTeamPoint);

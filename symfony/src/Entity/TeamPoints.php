@@ -18,22 +18,36 @@ class TeamPoints
     #[ORM\Column]
     private(set) int $id;
 
-    public function __construct(
+    #[ORM\Column(name: "step_number")]
+    private(set) int $stepNumber;
 
-        #[ORM\ManyToOne(targetEntity: Team::class)]
-        #[ORM\JoinColumn(nullable: false)]
-        readonly Team $team,
+    #[ORM\Column(type: "float")]
+    private(set) float $points;
 
-        #[ORM\ManyToOne(targetEntity: Simulation::class, inversedBy: "teamPoints")]
-        #[ORM\JoinColumn(nullable: false)]
-        private(set) Simulation $simulation,
+    #[ORM\ManyToOne(targetEntity: Team::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private(set) Team $team;
 
-        #[ORM\Column(name: "step_number")]
-        readonly int $stepNumber,
+    #[ORM\ManyToOne(targetEntity: Simulation::class, inversedBy: "teamPoints")]
+    #[ORM\JoinColumn(nullable: false)]
+    private(set) Simulation $simulation;
 
-        #[ORM\Column(type: "float")]
-        readonly float $points
-    ) {
+    public function setStepNumber(int $stepNumber): self
+    {
+        $this->stepNumber = $stepNumber;
+        return $this;
+    }
+
+    public function setPoints(float $points): self
+    {
+        $this->points = $points;
+        return $this;
+    }
+
+    public function setTeam(Team $team): self
+    {
+        $this->team = $team;
+        return $this;
     }
 
     public function setSimulation(Simulation $simulation): self
