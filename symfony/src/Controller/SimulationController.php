@@ -13,8 +13,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use OpenApi\Attributes as OA;
 
 #[Route('/api', name: 'api_')]
+#[OA\Tag(name: 'Simulations', description: 'Operations related to rugby match simulations')]
 class SimulationController extends AbstractController
 {
     public function __construct(
@@ -25,6 +27,72 @@ class SimulationController extends AbstractController
     }
 
     #[Route('/simulations/run', name: 'run_simulation', methods: ['POST'])]
+    #[OA\Post(
+        path: '/api/simulations/run',
+        description: 'Creates and runs a new simulation with the provided match data',
+        summary: 'Run a new simulation'
+    )]
+    #[OA\RequestBody(
+        description: 'Simulation data',
+        required: true,
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'name', description: 'Name of the simulation', type: 'string'),
+                new OA\Property(
+                    property: 'matches', description: 'Array of match data', type: 'array', items: new OA\Items(
+                        properties: [
+                            new OA\Property(property: 'homeTeamId', description: 'Home team ID', type: 'integer'),
+                            new OA\Property(property: 'awayTeamId', description: 'Away team ID', type: 'integer'),
+                            new OA\Property(property: 'homeScore', description: 'Home team score', type: 'integer'),
+                            new OA\Property(property: 'awayScore', description: 'Away team score', type: 'integer'),
+                            new OA\Property(
+                                property: 'isNeutralGround',
+                                description: 'Whether the match is played at a neutral venue',
+                                type: 'boolean',
+                                default: false
+                            ),
+                            new OA\Property(
+                                property: 'isWorldCup',
+                                description: 'Whether the match is part of the Rugby World Cup',
+                                type: 'boolean',
+                                default: false
+                            )
+                        ],
+                        type: 'object'
+                    )
+                )
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 201,
+        description: 'Simulation created and run successfully',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'message', type: 'string', example: 'Simulation created and run successfully'),
+                new OA\Property(property: 'simulationId', type: 'integer', example: 123)
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'Invalid request data',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'error', type: 'string', example: 'Invalid request data. Required fields: name, matches (array)'),
+                new OA\Property(property: 'context', type: 'object', nullable: true)
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 500,
+        description: 'Server error',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'error', type: 'string', example: 'An error occurred')
+            ]
+        )
+    )]
     public function runSimulation(Request $request, DatabaseUserProvider $databaseUserProvider): JsonResponse
     {
         try {
