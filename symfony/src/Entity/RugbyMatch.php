@@ -41,11 +41,11 @@ class RugbyMatch
     #[ORM\JoinColumn(nullable: false)]
     private(set) Simulation $simulation;
 
-    #[ORM\ManyToOne(targetEntity: Team::class)]
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: "homeMatches")]
     #[ORM\JoinColumn(nullable: false)]
     private(set) Team $homeTeam;
 
-    #[ORM\ManyToOne(targetEntity: Team::class)]
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: "awayMatches")]
     #[ORM\JoinColumn(nullable: false)]
     private(set) Team $awayTeam;
 

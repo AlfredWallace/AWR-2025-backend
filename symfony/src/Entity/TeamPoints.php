@@ -24,7 +24,7 @@ class TeamPoints
     #[ORM\Column(type: "float")]
     private(set) float $points;
 
-    #[ORM\ManyToOne(targetEntity: Team::class)]
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: "teamPoints")]
     #[ORM\JoinColumn(nullable: false)]
     private(set) Team $team;
 
