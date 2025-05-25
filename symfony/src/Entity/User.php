@@ -139,7 +139,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->simulations->removeElement($simulation)) {
             // set the owning side to null (unless already changed)
-            if ($simulation->getUser() === $this) {
+            if ($simulation->user === $this) {
                 $simulation->setUser(null);
             }
         }

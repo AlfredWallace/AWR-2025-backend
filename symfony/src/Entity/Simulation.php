@@ -16,11 +16,11 @@ class Simulation
     private(set) int $id;
 
     #[ORM\Column]
-    private string $name;
+    private(set) string $name;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "simulations")]
     #[ORM\JoinColumn(nullable: false)]
-    private User $user;
+    private(set) User $user;
 
     #[ORM\OneToMany(targetEntity: RugbyMatch::class, mappedBy: "simulation", cascade: ["persist", "remove"])]
     #[ORM\OrderBy(["stepNumber" => "ASC"])]
@@ -29,17 +29,10 @@ class Simulation
     #[ORM\OneToMany(targetEntity: TeamPoints::class, mappedBy: "simulation", cascade: ["persist", "remove"])]
     private(set) Collection $teamPoints;
 
-    public function __construct(string $name, User $user)
+    public function __construct()
     {
-        $this->name = $name;
-        $this->user = $user;
         $this->matches = new ArrayCollection();
         $this->teamPoints = new ArrayCollection();
-    }
-
-    public function getUser(): User
-    {
-        return $this->user;
     }
 
     public function setUser(User $user): self
@@ -69,10 +62,6 @@ class Simulation
         return $this;
     }
 
-    public function getName(): string
-    {
-        return $this->name;
-    }
 
     public function setName(string $name): self
     {
