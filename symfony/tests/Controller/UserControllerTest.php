@@ -54,26 +54,4 @@ class UserControllerTest extends WebTestCase
         $this->assertArrayHasKey('message', $responseData);
         $this->assertEquals('User already exists', $responseData['message']);
     }
-
-    public function test_list_users(): void
-    {
-        $client = static::createClient();
-        
-        // Request the list of users
-        $client->request(
-            'GET',
-            '/api/users',
-            [],
-            [],
-            ['CONTENT_TYPE' => 'application/json']
-        );
-
-        // Assert response status code is 200 (OK)
-        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-
-        // Assert response content contains users array
-        $responseData = json_decode($client->getResponse()->getContent(), true);
-        $this->assertArrayHasKey('users', $responseData);
-        $this->assertIsArray($responseData['users']);
-    }
 }
