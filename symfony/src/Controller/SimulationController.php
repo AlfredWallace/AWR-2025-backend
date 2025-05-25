@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Simulation;
 use App\Exception\InvalidMatchDataException;
+use App\Service\DatabaseUserProvider;
 use App\Service\MatchFactory;
 use App\Service\SimulationRunner;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,12 +20,12 @@ class SimulationController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly SimulationRunner $simulationRunner,
-        private readonly MatchFactory $matchFactory
+        private readonly MatchFactory $matchFactory,
     ) {
     }
 
     #[Route('/simulations/run', name: 'run_simulation', methods: ['POST'])]
-    public function runSimulation(Request $request): JsonResponse
+    public function runSimulation(Request $request, DatabaseUserProvider $databaseUserProvider): JsonResponse
     {
         try {
             $data = json_decode($request->getContent(), true);
@@ -35,38 +36,25 @@ class SimulationController extends AbstractController
                 ], Response::HTTP_BAD_REQUEST);
             }
 
-            // Create a new simulation
-            $simulation = new Simulation($data['name']);
+            $simulation = new Simulation();
+            $simulation->setName($data['name']);
+            $simulation->setUser($databaseUserProvider->getUser());
 
-            // Variable to track current match index for error reporting
-            $currentMatchIndex = 0;
-
-            // Process each match
             foreach ($data['matches'] as $index => $matchData) {
-                $currentMatchIndex = $index;
-
-                // Create match using MatchFactory
                 $match = $this->matchFactory->createMatch($matchData, $simulation, $index + 1);
-
-                // Add match to simulation
                 $simulation->addMatch($match);
-
-                // Persist match
                 $this->entityManager->persist($match);
             }
 
-            // Persist simulation
             $this->entityManager->persist($simulation);
             $this->entityManager->flush();
 
             $this->simulationRunner->runNewSimulation($simulation);
 
-            // Return success response
             return $this->json([
                 'message' => 'Simulation created and run successfully',
                 'simulationId' => $simulation->id
             ], Response::HTTP_CREATED);
-
         } catch (InvalidMatchDataException $e) {
             return $this->json([
                 'error' => $e->getMessage(),
