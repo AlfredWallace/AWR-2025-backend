@@ -63,7 +63,7 @@ class BasicGetTest extends WebTestCase
         // Register a test user
         $this->client->request(
             'POST',
-            '/api/register',
+            '/api/users/register',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
@@ -97,7 +97,7 @@ class BasicGetTest extends WebTestCase
 
         $responseData = json_decode($response->getContent(), true);
         $this->assertArrayHasKey('token', $responseData);
-        
+
         $this->token = $responseData['token'];
     }
 }

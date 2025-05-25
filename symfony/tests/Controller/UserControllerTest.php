@@ -15,7 +15,7 @@ class UserControllerTest extends WebTestCase
         // First registration should succeed
         $client->request(
             'POST',
-            '/api/register',
+            '/api/users/register',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
@@ -36,7 +36,7 @@ class UserControllerTest extends WebTestCase
         // Try to register the same user again
         $client->request(
             'POST',
-            '/api/register',
+            '/api/users/register',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],

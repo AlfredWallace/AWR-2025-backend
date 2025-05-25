@@ -52,9 +52,9 @@ class UserController extends AbstractController
         return $this->json(['users' => $users]);
     }
 
-    #[Route('/register', name: 'register', methods: ['POST'])]
+    #[Route('/users/register', name: 'register', methods: ['POST'])]
     #[OA\Post(
-        path: '/api/register',
+        path: '/api/users/register',
         description: 'Registers a new user in the system',
         summary: 'Register a new user'
     )]

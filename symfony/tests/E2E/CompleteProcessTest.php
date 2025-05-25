@@ -84,7 +84,7 @@ class CompleteProcessTest extends WebTestCase
 
         $responseData = json_decode($response->getContent(), true);
         $this->assertArrayHasKey('token', $responseData);
-        
+
         $this->adminToken = $responseData['token'];
     }
 
@@ -117,7 +117,7 @@ class CompleteProcessTest extends WebTestCase
         // Register a normal user
         $this->client->request(
             'POST',
-            '/api/register',
+            '/api/users/register',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
@@ -155,7 +155,7 @@ class CompleteProcessTest extends WebTestCase
 
         $responseData = json_decode($response->getContent(), true);
         $this->assertArrayHasKey('token', $responseData);
-        
+
         $this->basicUserToken = $responseData['token'];
     }
 
