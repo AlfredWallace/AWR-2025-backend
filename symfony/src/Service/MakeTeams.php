@@ -20,15 +20,14 @@ readonly class MakeTeams
         foreach ($teamsData as $teamData) {
             $this->validateTeamDataStructure($teamData);
 
-            $team = new Team(
-                name: $teamData['team']['name'],
-                abbreviation: $teamData['team']['abbreviation'],
-                externalId: $teamData['team']['id'],
-                externalAltId: $teamData['team']['altId'],
-                countryCode: $teamData['team']['countryCode'],
-                points: $teamData['pts'],
-                previousPoints: $teamData['previousPts']
-            );
+            $team = new Team();
+            $team->setName($teamData['team']['name'])
+                ->setAbbreviation($teamData['team']['abbreviation'])
+                ->setExternalId($teamData['team']['id'])
+                ->setExternalAltId($teamData['team']['altId'])
+                ->setCountryCode($teamData['team']['countryCode'])
+                ->setPoints($teamData['pts'])
+                ->setPreviousPoints($teamData['previousPts']);
 
             // Validate the team values
             $violations = $this->validator->validate($team);
