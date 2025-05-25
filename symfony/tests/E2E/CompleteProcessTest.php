@@ -19,7 +19,7 @@ class CompleteProcessTest extends WebTestCase
         $this->client = static::createClient();
     }
 
-    public function testCompleteProcess(): void
+    public function test_complete_process(): void
     {
         // Step 1: Create an admin user with the Symfony command
         $this->createAdminUser();
