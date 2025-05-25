@@ -6,7 +6,6 @@ use App\Repository\TeamRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Attribute as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
@@ -40,15 +39,12 @@ class Team
     private(set) float $previousPoints;
 
     #[ORM\OneToMany(targetEntity: TeamPoints::class, mappedBy: "team")]
-    #[Serializer\Ignore]
     private(set) Collection $teamPoints;
 
     #[ORM\OneToMany(targetEntity: RugbyMatch::class, mappedBy: "homeTeam")]
-    #[Serializer\Ignore]
     private(set) Collection $homeMatches;
 
     #[ORM\OneToMany(targetEntity: RugbyMatch::class, mappedBy: "awayTeam")]
-    #[Serializer\Ignore]
     private(set) Collection $awayMatches;
 
     public function __construct()

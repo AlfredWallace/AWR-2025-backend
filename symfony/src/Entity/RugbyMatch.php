@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\RugbyMatchRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RugbyMatchRepository::class)]
@@ -39,14 +40,17 @@ class RugbyMatch
 
     #[ORM\ManyToOne(targetEntity: Simulation::class, inversedBy: "matches")]
     #[ORM\JoinColumn(nullable: false)]
+    #[Serializer\Ignore]
     private(set) Simulation $simulation;
 
     #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: "homeMatches")]
     #[ORM\JoinColumn(nullable: false)]
+    #[Serializer\Ignore]
     private(set) Team $homeTeam;
 
     #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: "awayMatches")]
     #[ORM\JoinColumn(nullable: false)]
+    #[Serializer\Ignore]
     private(set) Team $awayTeam;
 
     public function setHomeScore(int $homeScore): self

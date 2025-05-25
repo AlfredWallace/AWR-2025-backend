@@ -21,15 +21,14 @@ class Simulation
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "simulations")]
     #[ORM\JoinColumn(nullable: false)]
+    #[Serializer\Ignore]
     private(set) User $user;
 
     #[ORM\OneToMany(targetEntity: RugbyMatch::class, mappedBy: "simulation", cascade: ["persist", "remove"])]
     #[ORM\OrderBy(["stepNumber" => "ASC"])]
-    #[Serializer\Ignore]
     private(set) Collection $matches;
 
     #[ORM\OneToMany(targetEntity: TeamPoints::class, mappedBy: "simulation", cascade: ["persist", "remove"])]
-    #[Serializer\Ignore]
     private(set) Collection $teamPoints;
 
     public function __construct()

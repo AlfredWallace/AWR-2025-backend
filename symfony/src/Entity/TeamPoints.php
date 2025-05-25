@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TeamPointsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute as Serializer;
 
 #[ORM\Entity(repositoryClass: TeamPointsRepository::class)]
 #[ORM\UniqueConstraint(
@@ -26,10 +27,12 @@ class TeamPoints
 
     #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: "teamPoints")]
     #[ORM\JoinColumn(nullable: false)]
+    #[Serializer\Ignore]
     private(set) Team $team;
 
     #[ORM\ManyToOne(targetEntity: Simulation::class, inversedBy: "teamPoints")]
     #[ORM\JoinColumn(nullable: false)]
+    #[Serializer\Ignore]
     private(set) Simulation $simulation;
 
     public function setStepNumber(int $stepNumber): self

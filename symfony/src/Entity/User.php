@@ -34,7 +34,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\OneToMany(targetEntity: Simulation::class, mappedBy: 'user', orphanRemoval: true)]
-    #[Serializer\Ignore]
     private Collection $simulations;
 
     public function __construct()
