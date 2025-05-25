@@ -21,6 +21,10 @@ security:
             pattern: ^/api/register
             security: false
 
+        doc:
+            pattern: ^/api/doc$
+            security: false
+
         login:
             pattern: ^/api/login
             stateless: true
