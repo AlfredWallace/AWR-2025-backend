@@ -7,14 +7,12 @@ use App\Entity\Simulation;
 use App\Entity\Team;
 use App\Exception\InvalidMatchDataException;
 use App\Repository\TeamRepository;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 readonly class MatchFactory
 {
     public function __construct(
         private TeamRepository $teamRepository,
-        private SerializerInterface $serializer,
         private ValidatorInterface $validator
     ) {
     }
