@@ -17,8 +17,8 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        public:
-            pattern: ^/api/register
+        registration:
+            pattern: ^/api/users/register$
             security: false
 
         doc:
