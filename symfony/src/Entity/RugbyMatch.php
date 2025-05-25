@@ -20,42 +20,80 @@ class RugbyMatch
     #[ORM\Column]
     private(set) int $id;
 
-    public function __construct(
+    #[ORM\Column]
+    #[Assert\GreaterThanOrEqual(0)]
+    private(set) int $homeScore;
 
-        #[ORM\ManyToOne(targetEntity: Team::class)]
-        #[ORM\JoinColumn(nullable: false)]
-        readonly Team $homeTeam,
+    #[ORM\Column]
+    #[Assert\GreaterThanOrEqual(0)]
+    private(set) int $awayScore;
 
-        #[ORM\ManyToOne(targetEntity: Team::class)]
-        #[ORM\JoinColumn(nullable: false)]
-        readonly Team $awayTeam,
+    #[ORM\Column(name: "step_number")]
+    private(set) int $stepNumber;
 
-        #[ORM\Column]
-        #[Assert\GreaterThanOrEqual(0)]
-        readonly int $homeScore,
+    #[ORM\Column]
+    private(set) bool $isNeutralGround = false;
 
-        #[ORM\Column]
-        #[Assert\GreaterThanOrEqual(0)]
-        readonly int $awayScore,
+    #[ORM\Column]
+    private(set) bool $isWorldCup = false;
 
-        #[ORM\Column(name: "step_number")]
-        readonly int $stepNumber,
+    #[ORM\ManyToOne(targetEntity: Simulation::class, inversedBy: "matches")]
+    #[ORM\JoinColumn(nullable: false)]
+    private(set) Simulation $simulation;
 
-        #[ORM\ManyToOne(targetEntity: Simulation::class, inversedBy: "matches")]
-        #[ORM\JoinColumn(nullable: false)]
-        private(set) Simulation $simulation,
+    #[ORM\ManyToOne(targetEntity: Team::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private(set) Team $homeTeam;
 
-        #[ORM\Column]
-        readonly bool $isNeutralGround = false,
+    #[ORM\ManyToOne(targetEntity: Team::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private(set) Team $awayTeam;
 
-        #[ORM\Column]
-        readonly bool $isWorldCup = false
-    ) {
+    public function setHomeScore(int $homeScore): self
+    {
+        $this->homeScore = $homeScore;
+        return $this;
+    }
+
+    public function setAwayScore(int $awayScore): self
+    {
+        $this->awayScore = $awayScore;
+        return $this;
+    }
+
+    public function setStepNumber(int $stepNumber): self
+    {
+        $this->stepNumber = $stepNumber;
+        return $this;
+    }
+
+    public function setIsNeutralGround(bool $isNeutralGround): self
+    {
+        $this->isNeutralGround = $isNeutralGround;
+        return $this;
+    }
+
+    public function setIsWorldCup(bool $isWorldCup): self
+    {
+        $this->isWorldCup = $isWorldCup;
+        return $this;
     }
 
     public function setSimulation(Simulation $simulation): self
     {
         $this->simulation = $simulation;
+        return $this;
+    }
+
+    public function setHomeTeam(Team $homeTeam): self
+    {
+        $this->homeTeam = $homeTeam;
+        return $this;
+    }
+
+    public function setAwayTeam(Team $awayTeam): self
+    {
+        $this->awayTeam = $awayTeam;
         return $this;
     }
 }

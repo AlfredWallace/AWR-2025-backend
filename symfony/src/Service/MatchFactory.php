@@ -43,10 +43,24 @@ readonly class MatchFactory
         $matchData['homeTeam'] = $homeTeam;
         $matchData['awayTeam'] = $awayTeam;
         $matchData['stepNumber'] = $stepNumber;
-        $matchData['simulation'] = $simulation;
 
-        // Deserialize match data into RugbyMatch object
-        $match = $this->serializer->denormalize($matchData, RugbyMatch::class);
+        // Create a new RugbyMatch object and set its properties
+        $match = new RugbyMatch();
+        $match->setHomeTeam($homeTeam);
+        $match->setAwayTeam($awayTeam);
+        $match->setHomeScore($matchData['homeScore']);
+        $match->setAwayScore($matchData['awayScore']);
+        $match->setStepNumber($stepNumber);
+        $match->setSimulation($simulation);
+
+        // Set optional properties if they exist
+        if (isset($matchData['isNeutralGround'])) {
+            $match->setIsNeutralGround($matchData['isNeutralGround']);
+        }
+
+        if (isset($matchData['isWorldCup'])) {
+            $match->setIsWorldCup($matchData['isWorldCup']);
+        }
 
         // Validate the match
         $violations = $this->validator->validate($match);
