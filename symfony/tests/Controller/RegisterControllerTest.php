@@ -10,6 +10,7 @@ class RegisterControllerTest extends WebTestCase
     public function test_user_registration(): void
     {
         $client = static::createClient();
+        $username = 'user'.uniqid();
 
         // First registration should succeed
         $client->request(
@@ -19,7 +20,7 @@ class RegisterControllerTest extends WebTestCase
             [],
             ['CONTENT_TYPE' => 'application/json'],
             json_encode([
-                'username' => 'test_user',
+                'username' => $username,
                 'password' => 'test_password'
             ])
         );
@@ -40,7 +41,7 @@ class RegisterControllerTest extends WebTestCase
             [],
             ['CONTENT_TYPE' => 'application/json'],
             json_encode([
-                'username' => 'test_user',
+                'username' => $username,
                 'password' => 'other_password'
             ])
         );

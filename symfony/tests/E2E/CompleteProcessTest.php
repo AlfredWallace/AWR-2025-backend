@@ -11,8 +11,10 @@ use Symfony\Component\HttpFoundation\Response;
 class CompleteProcessTest extends WebTestCase
 {
     private KernelBrowser $client;
+    private string $adminUsername;
     private string $adminToken;
-    private string $userToken;
+    private string $basicUsername;
+    private string $basicUserToken;
 
     protected function setUp(): void
     {
@@ -50,15 +52,16 @@ class CompleteProcessTest extends WebTestCase
 
         $command = $application->find('app:create-admin');
         $commandTester = new CommandTester($command);
-        
+
+        $this->adminUsername = 'admin'.uniqid();
         // Execute the command with username and password arguments
         $commandTester->execute([
-            'username' => 'admin_user',
+            'username' => $this->adminUsername,
             'password' => 'admin_password'
         ]);
 
         // Assert the command was successful
-        $this->assertStringContainsString('Admin user "admin_user" has been created successfully', $commandTester->getDisplay());
+        $this->assertStringContainsString('Admin user "'.$this->adminUsername.'" has been created successfully', $commandTester->getDisplay());
     }
 
     private function getAdminToken(): void
@@ -71,7 +74,7 @@ class CompleteProcessTest extends WebTestCase
             [],
             ['CONTENT_TYPE' => 'application/json'],
             json_encode([
-                'username' => 'admin_user',
+                'username' => $this->adminUsername,
                 'password' => 'admin_password'
             ])
         );
@@ -109,6 +112,8 @@ class CompleteProcessTest extends WebTestCase
 
     private function registerNormalUser(): void
     {
+        $this->basicUsername = 'user'.uniqid();
+
         // Register a normal user
         $this->client->request(
             'POST',
@@ -117,7 +122,7 @@ class CompleteProcessTest extends WebTestCase
             [],
             ['CONTENT_TYPE' => 'application/json'],
             json_encode([
-                'username' => 'normal_user',
+                'username' => $this->basicUsername,
                 'password' => 'normal_password'
             ])
         );
@@ -140,7 +145,7 @@ class CompleteProcessTest extends WebTestCase
             [],
             ['CONTENT_TYPE' => 'application/json'],
             json_encode([
-                'username' => 'normal_user',
+                'username' => $this->basicUsername,
                 'password' => 'normal_password'
             ])
         );
@@ -151,7 +156,7 @@ class CompleteProcessTest extends WebTestCase
         $responseData = json_decode($response->getContent(), true);
         $this->assertArrayHasKey('token', $responseData);
         
-        $this->userToken = $responseData['token'];
+        $this->basicUserToken = $responseData['token'];
     }
 
     private function getTeamIds(): array
@@ -164,7 +169,7 @@ class CompleteProcessTest extends WebTestCase
             [],
             [
                 'CONTENT_TYPE' => 'application/json',
-                'HTTP_AUTHORIZATION' => 'Bearer ' . $this->userToken
+                'HTTP_AUTHORIZATION' => 'Bearer ' . $this->basicUserToken
             ]
         );
 
@@ -193,7 +198,7 @@ class CompleteProcessTest extends WebTestCase
             [],
             [
                 'CONTENT_TYPE' => 'application/json',
-                'HTTP_AUTHORIZATION' => 'Bearer ' . $this->userToken
+                'HTTP_AUTHORIZATION' => 'Bearer ' . $this->basicUserToken
             ],
             json_encode([
                 'name' => 'Test Simulation',
