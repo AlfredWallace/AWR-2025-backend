@@ -12,8 +12,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Attributes as OA;
+use App\Form\RegistrationFormType; // Added import
 
-#[Route('/api', name: 'api_')]
+// Ensure App\Entity\User is imported. It was already used in the old register method.
+// use App\Entity\User; // Already implicitly available or handled by Symfony's autoloader for entities
+
+#[Route(name: 'app_')] // Changed base route name for non-API routes if needed, or handle routing prefix carefully
 #[OA\Tag(name: 'Users', description: 'Operations related to users')]
 class UserController extends AbstractController
 {
@@ -24,9 +28,9 @@ class UserController extends AbstractController
     ) {
     }
 
-    #[Route('/users', name: 'list_users', methods: ['GET'])]
+    #[Route('/users', name: 'list_users', methods: ['GET'])] // Path becomes /users, name is app_list_users
     #[OA\Get(
-        path: '/api/users',
+        path: '/users', // Corrected OA path
         description: 'Returns a list of all users in the system',
         summary: 'List all users'
     )]
@@ -52,88 +56,118 @@ class UserController extends AbstractController
         return $this->json(['users' => $users]);
     }
 
-    #[Route('/users/register', name: 'register', methods: ['POST'])]
-    #[OA\Post(
-        path: '/api/users/register',
-        description: 'Registers a new user in the system',
-        summary: 'Register a new user'
-    )]
-    #[OA\RequestBody(
-        description: 'User registration data',
-        required: true,
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: 'username', type: 'string'),
-                new OA\Property(property: 'password', type: 'string')
-            ]
-        )
-    )]
-    #[OA\Response(
-        response: 201,
-        description: 'User registered successfully',
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: 'message', type: 'string')
-            ]
-        )
-    )]
-    #[OA\Response(
-        response: 400,
-        description: 'Bad request - missing required fields',
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: 'message', type: 'string')
-            ]
-        )
-    )]
-    #[OA\Response(
-        response: 409,
-        description: 'Conflict - user already exists',
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: 'message', type: 'string')
-            ]
-        )
-    )]
-    public function register(Request $request): JsonResponse
+    #[Route('/register', name: 'register', methods: ['GET', 'POST'])]
+    public function registerForm(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
     {
-        $data = json_decode($request->getContent(), true);
-
-        // Validate required fields
-        if (!isset($data['username']) || !isset($data['password'])) {
-            return $this->json([
-                'message' => 'Username and password are required'
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
-        // Check if user already exists
-        $existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $data['username']]);
-        if ($existingUser) {
-            return $this->json([
-                'message' => 'User already exists'
-            ], Response::HTTP_CONFLICT);
-        }
-
-        // Create new user
         $user = new User();
-        $user->setUsername($data['username']);
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
 
-        // Hash the password
-        $hashedPassword = $this->passwordHasher->hashPassword(
-            $user,
-            $data['password']
-        );
-        $user->setPassword($hashedPassword);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // encode the plain password
+            $user->setPassword(
+                $passwordHasher->hashPassword(
+                    $user,
+                    $form->get('password')->getData()
+                )
+            );
+            $user->setRoles(['ROLE_USER']); // Username is set via form binding
 
-        // Set default roles
-        $user->setRoles(['ROLE_USER']);
+            $entityManager->persist($user);
+            $entityManager->flush();
 
-        // Save user to database
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+            $this->addFlash('success', 'Successfully registered!');
 
-        return $this->json([
-            'message' => 'User registered successfully'
-        ], Response::HTTP_CREATED);
+            return $this->redirectToRoute('app_list_users'); // Corrected redirection target
+        }
+
+        return $this->render('registration/register.html.twig', [
+            'registrationForm' => $form->createView(),
+        ]);
     }
+
+    // #[Route('/users/register', name: 'register', methods: ['POST'])]
+    // #[OA\Post(
+    //     path: '/api/users/register',
+    //     description: 'Registers a new user in the system',
+    //     summary: 'Register a new user'
+    // )]
+    // #[OA\RequestBody(
+    //     description: 'User registration data',
+    //     required: true,
+    //     content: new OA\JsonContent(
+    //         properties: [
+    //             new OA\Property(property: 'username', type: 'string'),
+    //             new OA\Property(property: 'password', type: 'string')
+    //         ]
+    //     )
+    // )]
+    // #[OA\Response(
+    //     response: 201,
+    //     description: 'User registered successfully',
+    //     content: new OA\JsonContent(
+    //         properties: [
+    //             new OA\Property(property: 'message', type: 'string')
+    //         ]
+    //     )
+    // )]
+    // #[OA\Response(
+    //     response: 400,
+    //     description: 'Bad request - missing required fields',
+    //     content: new OA\JsonContent(
+    //         properties: [
+    //             new OA\Property(property: 'message', type: 'string')
+    //         ]
+    //     )
+    // )]
+    // #[OA\Response(
+    //     response: 409,
+    //     description: 'Conflict - user already exists',
+    //     content: new OA\JsonContent(
+    //         properties: [
+    //             new OA\Property(property: 'message', type: 'string')
+    //         ]
+    //     )
+    // )]
+    // public function register(Request $request): JsonResponse
+    // {
+    //     $data = json_decode($request->getContent(), true);
+
+    //     // Validate required fields
+    //     if (!isset($data['username']) || !isset($data['password'])) {
+    //         return $this->json([
+    //             'message' => 'Username and password are required'
+    //         ], Response::HTTP_BAD_REQUEST);
+    //     }
+
+    //     // Check if user already exists
+    //     $existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $data['username']]);
+    //     if ($existingUser) {
+    //         return $this->json([
+    //             'message' => 'User already exists'
+    //         ], Response::HTTP_CONFLICT);
+    //     }
+
+    //     // Create new user
+    //     $user = new User();
+    //     $user->setUsername($data['username']);
+
+    //     // Hash the password
+    //     $hashedPassword = $this->passwordHasher->hashPassword(
+    //         $user,
+    //         $data['password']
+    //     );
+    //     $user->setPassword($hashedPassword);
+
+    //     // Set default roles
+    //     $user->setRoles(['ROLE_USER']);
+
+    //     // Save user to database
+    //     $this->entityManager->persist($user);
+    //     $this->entityManager->flush();
+
+    //     return $this->json([
+    //         'message' => 'User registered successfully'
+    //     ], Response::HTTP_CREATED);
+    // }
 }
