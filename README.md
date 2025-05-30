@@ -33,18 +33,18 @@ AWR allows users to:
    cd awr
    ```
 
-2. Start the Docker containers:
+2. Run the installation script:
    ```bash
-   make up
+   make install
    ```
-   This will start the PHP, Nginx, and PostgreSQL containers.
+   This will 
+   - Start the PHP, Nginx, and PostgreSQL containers (up -d)
+   - Install the application dependencies (composer install)
+   - Create the database and tables (run migrations)
+   - Generate JWT keys (lexik bundle)
+   - Create an admin user (credentials: admin/admin)
 
-3. Run database migrations:
-   ```bash
-   make migrate
-   ```
-
-4. Access the application at http://localhost:8888
+3. Access the application at http://localhost:8888 and the doc at http://localhost:8888/api/doc
 
 ## Docker Setup
 
@@ -65,6 +65,7 @@ The project includes a Makefile with the following commands:
 - `make backup-db`: Create a database backup
 - `make migration`: Create a new migration
 - `make migrate`: Run migrations
+- `make install`: Run the installation script`
 
 ## Database Configuration
 
@@ -80,10 +81,10 @@ The database is configured with the following settings:
 
 The project uses PHPUnit for testing. Tests are organized into:
 
-- **Unit Tests**: Testing individual components
-- **Controller Tests**: Testing API endpoints
-- **E2E Tests**: End-to-end testing
-- **Smoke Tests**: Basic functionality tests
+- **Unit Tests**: Testing the ranking algorithm alone
+- **Smoke Tests**: Checking 200 on GET routes and 401 on protected routes
+- **End 2 End Tests**: Testing a complete process, from user login to simulation results 
+- **Controller Tests**: Testing user registration
 
 Run tests with:
 ```bash

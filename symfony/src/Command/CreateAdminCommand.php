@@ -46,7 +46,7 @@ class CreateAdminCommand extends Command
             // Check if user already exists
             $existingUser = $this->userRepository->findOneBy(['username' => $username]);
             if ($existingUser) {
-                $io->error(sprintf('User "%s" already exists.', $username));
+                $io->note(sprintf('User "%s" already exists, skipping the creation.', $username));
                 return Command::FAILURE;
             }
             
