@@ -44,6 +44,12 @@ security:
             provider: jwt
             jwt: ~
 
+        admin:
+            pattern: ^/admin
+            stateless: true
+            provider: jwt
+            jwt: ~
+
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 
