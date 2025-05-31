@@ -1,4 +1,22 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Admin Login{% endblock %}
+
 {% block body %}
+    <h2>Admin Login</h2>
+    {{ form_start(form) }}
+        <div>
+            {{ form_label(form.username) }}
+            {{ form_widget(form.username) }}
+            {{ form_errors(form.username) }}
+        </div>
+        <div>
+            {{ form_label(form.password) }}
+            {{ form_widget(form.password) }}
+            {{ form_errors(form.password) }}
+        </div>
+        <div>
+            <button type="submit">Login</button>
+        </div>
+    {{ form_end(form) }}
 {% endblock %}
