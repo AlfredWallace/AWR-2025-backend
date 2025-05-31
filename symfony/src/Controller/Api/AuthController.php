@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use OpenApi\Attributes as OA;
 
 #[Route('/api', name: 'api_')]
 #[OA\Tag(name: 'Authentication', description: 'Operations related to authentication')]

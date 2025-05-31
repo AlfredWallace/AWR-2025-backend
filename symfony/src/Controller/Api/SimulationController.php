@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use App\Entity\Simulation;
 use App\Exception\InvalidMatchDataException;
@@ -8,12 +8,12 @@ use App\Service\DatabaseUserProvider;
 use App\Service\MatchFactory;
 use App\Service\SimulationRunner;
 use Doctrine\ORM\EntityManagerInterface;
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use OpenApi\Attributes as OA;
 
 #[Route('/api', name: 'api_')]
 #[OA\Tag(name: 'Simulations', description: 'Operations related to rugby match simulations')]

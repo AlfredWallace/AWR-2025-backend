@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use App\Repository\TeamRepository;
 use App\Service\ResetTeams;
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,7 +13,6 @@ use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use OpenApi\Attributes as OA;
 
 #[Route('/api', name: 'api_')]
 #[OA\Tag(name: 'Teams', description: 'Operations related to rugby teams')]

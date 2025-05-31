@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use OpenApi\Attributes as OA;
 
 #[Route('/api', name: 'api_')]
 #[OA\Tag(name: 'Users', description: 'Operations related to users')]
