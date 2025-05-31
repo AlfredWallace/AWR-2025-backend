@@ -1,4 +1,4 @@
-.PHONY: up down test validate-schema backup-db migration migrate install
+.PHONY: up down test validate-schema backup-db migration migrate install clear
 
 up:
 	docker compose up -d --remove-orphans
@@ -8,6 +8,9 @@ down:
 
 test:
 	docker compose exec php vendor/bin/phpunit
+
+clear:
+	docker compose exec php bin/console cache:clear
 
 validate-schema:
 	docker compose exec php bin/console doctrine:schema:validate
