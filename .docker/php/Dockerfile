@@ -12,3 +12,6 @@ RUN install-php-extensions \
 	opcache
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+ENV FRANKENPHP_CONFIG="worker /app/public/index.php"
+ENV APP_RUNTIME="Runtime\\FrankenPhpSymfony\\Runtime"
