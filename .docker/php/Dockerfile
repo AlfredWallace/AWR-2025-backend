@@ -5,3 +5,6 @@ RUN install-php-extensions \
 	intl \
 	zip \
 	opcache
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
