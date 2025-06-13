@@ -65,7 +65,7 @@ The project includes a Makefile with the following commands:
 - `make backup-db`: Create a database backup
 - `make migration`: Create a new migration
 - `make migrate`: Run migrations
-- `make install`: Run the installation script`
+- `make install`: Run the installation script
 
 ## Database Configuration
 
