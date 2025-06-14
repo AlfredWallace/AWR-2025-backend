@@ -3,9 +3,24 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1>Admin Dashboard</h1>
-        <p>Welcome to the admin dashboard. This is a dummy text page.</p>
-        <p>Here you can manage your application's settings and data.</p>
-    </div>
+    <article>
+        <h2>Admin Dashboard</h2>
+        <h3>Teams</h3>
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for team in teams %}
+                    <tr>
+                        <td>{{ team.name }}</td>
+                        <td>{{ team.points|round(2) }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </article>
 {% endblock %}

@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Form\AdminLoginType;
+use App\Repository\TeamRepository;
 use App\Repository\UserRepository;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +23,8 @@ class AdminController extends AbstractController
     public function __construct(
         private readonly UserRepository $userRepository,
         private readonly UserPasswordHasherInterface $passwordHasher,
-        private readonly JWTTokenManagerInterface $jwtManager
+        private readonly JWTTokenManagerInterface $jwtManager,
+        private readonly TeamRepository $teamRepository,
     ) {
     }
 
@@ -90,6 +92,8 @@ class AdminController extends AbstractController
     #[Route('/', name: 'dashboard')]
     public function dashboard(): Response
     {
-        return $this->render('admin/dashboard.html.twig');
+        return $this->render('admin/dashboard.html.twig', [
+            'teams' => $this->teamRepository->findBy([], ['points' => 'DESC']),
+        ]);
     }
 }
